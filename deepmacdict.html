@@ -1,0 +1,358 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+<head>
+    <title>phpMyAdmin Data Dictionaryu</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+
+<body>
+<h2>tb_OUI</h2>
+
+<table width="100%" class="print">
+<tr><th width="50">Field</th>
+    <th width="80">Type</th>
+    <th width="40">Null</th>
+    <th width="70">Default</th>
+        <th>Comments</th>
+</tr>
+    <tr class="odd">
+    <td nowrap="nowrap">
+        <u>prefix</u>    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">char(6)</td>
+    <td>No</td>
+    <td nowrap="nowrap"></td>
+            <td>The six digits of the OUI itself , seperators omitted</td>
+</tr>
+        <tr class="even">
+    <td nowrap="nowrap">
+        comp_id    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(10) </td>
+    <td>No</td>
+    <td nowrap="nowrap"></td>
+            <td>ID of the company that is assigned this OUI (points to tb_company)</td>
+</tr>
+        <tr class="odd">
+    <td nowrap="nowrap">
+        date    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">date</td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td>The date this OUI was first added.</td>
+</tr>
+        <tr class="even">
+    <td nowrap="nowrap">
+        dev_id    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(8) </td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td>ID of the device class associated with this OUI (points to tb_device)</td>
+</tr>
+        <tr class="odd">
+    <td nowrap="nowrap">
+        model_id    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(8) </td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td>ID of the particular model of device associated with this OUI (points to tb_model)</td>
+</tr>
+        <tr class="even">
+    <td nowrap="nowrap">
+        media_id    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(8) </td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td>ID of the media type for this device class (points to tb_media)</td>
+</tr>
+        <tr class="odd">
+    <td nowrap="nowrap">
+        dar    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinyint(3) </td>
+    <td>No</td>
+    <td nowrap="nowrap">3</td>
+            <td>Data Accuracy Rating, a simple numeric value to indicate the approximate accuracy of this entry overall. Standard range is 1 through 5.</td>
+</tr>
+        <tr class="even">
+    <td nowrap="nowrap">
+        notes    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinytext</td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td>Any notes about this OUI entry, such as data sources, URLs, etc.</td>
+</tr>
+        </table>
+</div>
+    <div style="page-break-before: always;">
+<h2>tb_company</h2>
+
+<table width="100%" class="print">
+<tr><th width="50">Field</th>
+    <th width="80">Type</th>
+    <th width="40">Null</th>
+    <th width="70">Default</th>
+        <th>Comments</th>
+</tr>
+    <tr class="odd">
+    <td nowrap="nowrap">
+        <u>comp_id</u>    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(10) </td>
+    <td>No</td>
+    <td nowrap="nowrap"></td>
+            <td>Unique ID for each entry, primary key</td>
+</tr>
+        <tr class="even">
+    <td nowrap="nowrap">
+        parent_comp_id    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">int(10) </td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td>Company ID of parent company (if any)</td>
+</tr>
+        <tr class="odd">
+    <td nowrap="nowrap">
+        compname    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(128)</td>
+    <td>No</td>
+    <td nowrap="nowrap"></td>
+            <td>Name of company or organization</td>
+</tr>
+        <tr class="even">
+    <td nowrap="nowrap">
+        address1    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(128)</td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td>Current Address (line 1)</td>
+</tr>
+        <tr class="odd">
+    <td nowrap="nowrap">
+        address2    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(128)</td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td>Current Address (line 2)</td>
+</tr>
+        <tr class="even">
+    <td nowrap="nowrap">
+        address3    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(128)</td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td>Current Address (line 3)</td>
+</tr>
+        <tr class="odd">
+    <td nowrap="nowrap">
+        address4    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(128)</td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+        <tr class="even">
+    <td nowrap="nowrap">
+        address5    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(128)</td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+        <tr class="odd">
+    <td nowrap="nowrap">
+        country    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(64)</td>
+    <td>No</td>
+    <td nowrap="nowrap"></td>
+            <td>Current country</td>
+</tr>
+        <tr class="even">
+    <td nowrap="nowrap">
+        date    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">date</td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td>Date this company first appeared in OUI knowledgebase</td>
+</tr>
+        <tr class="odd">
+    <td nowrap="nowrap">
+        orgcompname    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(128)</td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td>Original company name</td>
+</tr>
+        <tr class="even">
+    <td nowrap="nowrap">
+        orgaddress1    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(128)</td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td>Original Address (line 1)</td>
+</tr>
+        <tr class="odd">
+    <td nowrap="nowrap">
+        orgaddress2    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(128)</td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td>Original Address (line 2)</td>
+</tr>
+        <tr class="even">
+    <td nowrap="nowrap">
+        orgaddress3    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(128)</td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td>Original Address (line 3)</td>
+</tr>
+        <tr class="odd">
+    <td nowrap="nowrap">
+        orgaddress4    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(128)</td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+        <tr class="even">
+    <td nowrap="nowrap">
+        orgaddress5    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(128)</td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td></td>
+</tr>
+        <tr class="odd">
+    <td nowrap="nowrap">
+        orgcountry    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(64)</td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td>Original company</td>
+</tr>
+        <tr class="even">
+    <td nowrap="nowrap">
+        notes    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinytext</td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td>Any notes about this company entry (i.e. history, URLs, etc)</td>
+</tr>
+        </table>
+</div>
+    <div style="page-break-before: always;">
+<h2>tb_device</h2>
+
+<table width="100%" class="print">
+<tr><th width="50">Field</th>
+    <th width="80">Type</th>
+    <th width="40">Null</th>
+    <th width="70">Default</th>
+        <th>Comments</th>
+</tr>
+    <tr class="odd">
+    <td nowrap="nowrap">
+        <u>dev_id</u>    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(10) </td>
+    <td>No</td>
+    <td nowrap="nowrap"></td>
+            <td>Unique ID for each device class entry, primary key</td>
+</tr>
+        <tr class="even">
+    <td nowrap="nowrap">
+        devname    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(128)</td>
+    <td>No</td>
+    <td nowrap="nowrap"></td>
+            <td>Device Class/Device Name</td>
+</tr>
+        <tr class="odd">
+    <td nowrap="nowrap">
+        notes    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumtext</td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td>Any notes about this device entry (i.e. similarity to other devices, possible sub-classes, etc)</td>
+</tr>
+        </table>
+</div>
+    <div style="page-break-before: always;">
+<h2>tb_media</h2>
+
+<table width="100%" class="print">
+<tr><th width="50">Field</th>
+    <th width="80">Type</th>
+    <th width="40">Null</th>
+    <th width="70">Default</th>
+        <th>Comments</th>
+</tr>
+    <tr class="odd">
+    <td nowrap="nowrap">
+        <u>media_id</u>    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(8) </td>
+    <td>No</td>
+    <td nowrap="nowrap"></td>
+            <td>Unique ID for each media type entry. These values are to be referenced in a bitmask from the tb_OUI table, to support multiple media type entries for each OUI</td>
+</tr>
+        <tr class="even">
+    <td nowrap="nowrap">
+        medianame    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(128)</td>
+    <td>No</td>
+    <td nowrap="nowrap"></td>
+            <td>Name of media type</td>
+</tr>
+        <tr class="odd">
+    <td nowrap="nowrap">
+        notes    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumtext</td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td>Any notes about this media type (i.e. aliases, URLs, etc)</td>
+</tr>
+        </table>
+</div>
+    <div style="page-break-before: always;">
+<h2>tb_model</h2>
+
+<table width="100%" class="print">
+<tr><th width="50">Field</th>
+    <th width="80">Type</th>
+    <th width="40">Null</th>
+    <th width="70">Default</th>
+        <th>Comments</th>
+</tr>
+    <tr class="odd">
+    <td nowrap="nowrap">
+        <u>model_id</u>    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(8) </td>
+    <td>No</td>
+    <td nowrap="nowrap"></td>
+            <td>Unique ID for each device model entry, primary key</td>
+</tr>
+        <tr class="even">
+    <td nowrap="nowrap">
+        dev_id    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">mediumint(8) </td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td>ID of device class this model entry is associated with (i.e. &quot;Blackberry&quot; is a model of &quot;Smartphone&quot; devices)</td>
+</tr>
+        <tr class="odd">
+    <td nowrap="nowrap">
+        modelname    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">varchar(128)</td>
+    <td>No</td>
+    <td nowrap="nowrap"></td>
+            <td>Name of the device model</td>
+</tr>
+        <tr class="even">
+    <td nowrap="nowrap">
+        notes    </td>
+    <td nowrap="nowrap" xml:lang="en" dir="ltr">tinytext</td>
+    <td>Yes</td>
+    <td nowrap="nowrap"><i>NULL</i></td>
+            <td>Any notes about this device model (i.e. model number, reference URL, aliases, etc)</td>
+</tr>
+        </table>
+</div>
+</body>
+</html>

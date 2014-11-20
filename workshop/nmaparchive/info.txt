@@ -1,0 +1,14 @@
+svn co --username guest --password "" svn://svn.insecure.org/nmap/
+svn info --username guest --password "" svn://svn.insecure.org/nmap/nmap-mac-prefixes -r2699
+
+
+Media IDs
+---------
+Ethernet        Bit 0           1
+Bluetooth       Bit 1           2
+WiFi            Bit 2           4
+Token Ring      Bit 3           8
+FDDI            Bit 4           16
+ATM             Bit 5           32
+ITU-T G.hn      Bit 6           64
+Virtual		Bit 7		128

@@ -1,0 +1,5 @@
+orphan checks
+-------------
+select prefix, comp_id from tb_OUI where comp_id not in (select comp_id from tb_company);
+
+select prefix, comp_id from tb_OUI where comp_id in (select comp_id from tb_company where compname = "");
