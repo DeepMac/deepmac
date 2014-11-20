@@ -73,34 +73,34 @@ Original Code
 	|-- bits		<-- Sub-dir for some PHP code
 	|-- dbload.pl		<-- Perl script to load MySQL database from a master OUI data file
 	|-- deepmacdict.html	\__ Database dictionary for MySQL back-end
-|-- deepmacdict_files	/
-|-- details.php		<-- PHP code to display detailed info on an OUi from backend
-|-- dump.sh		<-- Simple Shell script to generate MySQL dumps (for cron)
-|-- gen-ouidates.pl	<-- Perl script that generates a master OUI list with dates, from an archive of OUI files
-|-- index.php		<-- Main PHP index page for Deepmac search
-|-- oui2csv.pl		<-- Perl script to convert an IEEE-standard OUI text file to a tab-delimited format
-|-- ouiarchive.pl	<-- Perl script to check for and archive IEEE OUI files (run as daily cron job)
-|-- search.php		<-- PHP search code for DeepMac search interface
-|-- sqldump.sql		<-- A MySQL dump of the database, includes metadata not found in the OUI files
-|-- stats.pl		<-- Perl script to give some stats on the database backend
-`-- workshop		<-- Sub-dir with one-offs
-    |-- 20090427	<-- Restoration of a specific archived OUI dataset
-    |-- bacnet-map.pl	<-- Non-working attempt to map bacnet IDs to OUI registrations
-    |-- nmaparchive	<-- Archive of NMap SVN codes, for finding old OUI registry datasets
-    |-- php		<-- PHP code archive
-    `-- unbolted.net	<-- Archive of unbolted.net data related to Wireless profiles of OUI registrations
+	|-- deepmacdict_files	/
+	|-- details.php		<-- PHP code to display detailed info on an OUi from backend
+	|-- dump.sh		<-- Simple Shell script to generate MySQL dumps (for cron)
+	|-- gen-ouidates.pl	<-- Perl script that generates a master OUI list with dates, from an archive of OUI files
+	|-- index.php		<-- Main PHP index page for Deepmac search
+	|-- oui2csv.pl		<-- Perl script to convert an IEEE-standard OUI text file to a tab-delimited format
+	|-- ouiarchive.pl	<-- Perl script to check for and archive IEEE OUI files (run as daily cron job)
+	|-- search.php		<-- PHP search code for DeepMac search interface
+	|-- sqldump.sql		<-- A MySQL dump of the database, includes metadata not found in the OUI files
+	|-- stats.pl		<-- Perl script to give some stats on the database backend
+	`-- workshop		<-- Sub-dir with one-offs
+	    |-- 20090427	<-- Restoration of a specific archived OUI dataset
+	    |-- bacnet-map.pl	<-- Non-working attempt to map bacnet IDs to OUI registrations
+	    |-- nmaparchive	<-- Archive of NMap SVN codes, for finding old OUI registry datasets
+	    |-- php		<-- PHP code archive
+	    `-- unbolted.net	<-- Archive of unbolted.net data related to Wireless profiles of OUI registrations
 
 
 Project Reboot
 --------------
-|-- reboot
-|   |-- deepmac_connector.py	<-- DeepMac connector class. Connect to a DeepMac journal (currently filesystem only)
-|   |-- deepmac_import.py	<-- Python script to import OUI registry data into DeepMac journal
-|   |-- deepmac_manager.py	<-- DeepMac manager class. Mange connections, journal operations, etc.
-|   |-- deepmac_record_class.py	<-- DeepMac record class. Defines journal record format as an object, manipulates record entries, etc.
-|   |-- dmimport.cfg		<-- Config file for deepmac_import.py
-|   |-- gen-ouidates.pl		<-- Perl script that generates a master OUI list with dates, from an archive of OUI files
-|   |-- journal			<-- Sub-dir for holding DeepMac journal entries (for filesystem mode)
-|   |-- kb			<-- Sub-dir for holding IEEE OUI archive
-|   |-- oui2csv.pl		<-- Perl script to convert an IEEE-standard OUI text file to a tab-delimited format
-|   |-- ouiarchive.pl		<-- Perl script to check for and archive IEEE OUI files (run as daily cron job)
+	|-- reboot
+	|   |-- deepmac_connector.py	<-- DeepMac connector class. Connect to a DeepMac journal (currently filesystem only)
+	|   |-- deepmac_import.py	<-- Python script to import OUI registry data into DeepMac journal
+	|   |-- deepmac_manager.py	<-- DeepMac manager class. Mange connections, journal operations, etc.
+	|   |-- deepmac_record_class.py	<-- DeepMac record class. Defines journal record format as an object, manipulates record entries, etc.
+	|   |-- dmimport.cfg		<-- Config file for deepmac_import.py
+	|   |-- gen-ouidates.pl		<-- Perl script that generates a master OUI list with dates, from an archive of OUI files
+	|   |-- journal			<-- Sub-dir for holding DeepMac journal entries (for filesystem mode)
+	|   |-- kb			<-- Sub-dir for holding IEEE OUI archive
+	|   |-- oui2csv.pl		<-- Perl script to convert an IEEE-standard OUI text file to a tab-delimited format
+	|   |-- ouiarchive.pl		<-- Perl script to check for and archive IEEE OUI files (run as daily cron job)
