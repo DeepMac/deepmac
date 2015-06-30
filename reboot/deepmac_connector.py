@@ -4,7 +4,7 @@
 # Author : Jeff Mercer <jedi@jedimercer.com>
 # Purpose: Class definition for DeepMac Repository Connector
 # Written: 2014/04/25
-# Updated: 2014/06/12
+# Updated: 2014/12/16
 
 # Used to establish a connection to a DeepMac record repository (aka journal).
 # This is an intermediary class, used by the dmManager class in order to communicate with
@@ -21,7 +21,7 @@ handler = logging.StreamHandler()
 logformat = logging.Formatter("%(asctime)s - %(name)s %(levelname)s: %(message)s")
 handler.setFormatter(logformat)
 log.addHandler(handler)
-log.setLevel(logging.DEBUG)
+log.setLevel(logging.ERROR)
 
 ####
 
@@ -33,8 +33,6 @@ class dmConnector:
 	creds = { 'u': None, 'p': None }
 	con = None
 	
-	####
-
 	# Given an OUI (presumed valid), return a full path for the OUI's directory in the repository
 	# Note: Does not validate OUI. Does not test if directory exists or not.
 	def mkOUIPath(self, oui):
@@ -42,7 +40,8 @@ class dmConnector:
 		if self.type != "filesystem":
 			return False
 
-		# Strip colons and hyphens. Convert to all uppercase.
+		# Convert to standard string. Strip colons and hyphens. Convert to all uppercase.
+		oui = str(oui)
 		oui = oui.translate(None, ":-").upper()
 
 		# The first 6 characters divided up into three directories in path format.

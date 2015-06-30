@@ -1,0 +1,425 @@
+prefix	date	compname	medianame	devname	modelname	notes
+00000C	1998-04-22	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+00003B	2000-09-08	i Controls, Inc.	NULL	SCADA Device	NULL	NULL
+000074	1998-04-22	RICOH COMPANY LTD.	WiFi	Network Interface Card	NULL	NULL
+000092	2000-09-08	COGENT DATA TECHNOLOGIES	WiFi	Network Interface Card	NULL	NULL
+0000AA	1998-04-22	XEROX CORPORATION	WiFi	Network Interface Card	NULL	NULL
+0000C5	2000-09-08	ARRIS Group, Inc.	WiFi	Network Interface Card	NULL	NULL
+0000CE	2000-09-08	MEGADATA CORP.	WiFi	Network Interface Card	NULL	NULL
+0000DE	2000-09-08	CETIA	WiFi	Network Interface Card	NULL	NULL
+000103	2000-09-08	3COM CORPORATION	WiFi	Network Interface Card	NULL	NULL
+000123	2000-09-08	DIGITAL ELECTRONICS CORP.	NULL	SCADA Device	NULL	NULL
+000124	2000-09-08	Acer Incorporated	WiFi	Network Interface Card	NULL	NULL
+000138	2000-09-08	XAVi Technologies Corp.	WiFi	Network Interface Card	NULL	NULL
+000195	2000-09-08	Sena Technologies, Inc.	WiFi	Network Interface Card	NULL	NULL
+0001E6	2000-09-08	Hewlett-Packard Company	WiFi	Network Interface Card	NULL	NULL
+0001F0	2000-09-08	Tridium, Inc.	NULL	SCADA Device	NULL	NULL
+0001F4	2000-09-08	Enterasys Networks	WiFi	Network Interface Card	NULL	NULL
+00022D	2000-09-08	Agere Systems	WiFi	Network Interface Card	NULL	NULL
+000231	2000-09-08	Ingersoll-Rand	NULL	Physical Access Device	NULL	NULL
+000244	2000-09-08	SURECOM Technology Co.	WiFi	Network Interface Card	NULL	NULL
+00026F	2000-09-08	Senao International Co., Ltd.	WiFi	Network Interface Card	NULL	NULL
+000272	2000-09-08	CC&C Technologies, Inc.	WiFi	Network Interface Card	NULL	NULL
+000279	2000-09-08	Control Applications, Ltd.	NULL	SCADA Device	NULL	NULL
+00028A	2000-09-08	Ambit Microsystems Corporation	WiFi	Network Interface Card	NULL	NULL
+0002A5	2000-09-08	Hewlett-Packard Company	WiFi	Network Interface Card	NULL	NULL
+0002B3	2000-09-08	Intel Corporation	WiFi	Network Interface Card	NULL	NULL
+0002C7	2000-09-08	ALPS ELECTRIC Co., Ltd.	NULL	Videogame System	NULL	NULL
+0002D9	2000-09-08	Reliable Controls	NULL	SCADA Device	NULL	NULL
+00030A	2000-09-08	Argus Technologies	WiFi	Network Interface Card	NULL	NULL
+00032F	2000-09-08	Global Sun Technology, Inc.	WiFi	Network Interface Card	NULL	NULL
+00033D	2000-09-08	ILSHin Lab	NULL	SCADA Device	NULL	NULL
+000352	2000-09-08	Colubris Networks	WiFi	Network Interface Card	NULL	NULL
+000393	2000-11-09	Apple	WiFi	Network Interface Card	NULL	NULL
+0003D6	2000-11-09	RADVision, Ltd.	NULL	Video Conferencing Device	NULL	NULL
+0003FF	2000-11-09	Microsoft Corporation	Virtual	Virtual Computer	Virtual PC	NULL
+00041F	2000-11-09	Sony Computer Entertainment, Inc.	NULL	Videogame System	NULL	NULL
+000423	2000-11-09	Intel Corporation	WiFi	Network Interface Card	NULL	NULL
+00045A	2000-12-04	The Linksys Group, Inc.	WiFi	Network Interface Card	NULL	NULL
+000474	2000-12-04	LEGRAND	NULL	SCADA Device	NULL	NULL
+000475	2000-12-04	3 Com Corporation	WiFi	Network Interface Card	NULL	NULL
+000476	2000-12-04	3 Com Corporation	WiFi	Network Interface Card	NULL	NULL
+0004DB	2001-01-24	Tellus Group Corp.	WiFi	Network Interface Card	NULL	NULL
+0004E2	2001-01-24	SMC Networks, Inc.	WiFi	Network Interface Card	NULL	NULL
+0004F2	2001-01-24	Polycom	NULL	Video Conferencing Device	NULL	NULL
+000514	2001-02-02	KDT Systems Co., Ltd.	NULL	SCADA Device	NULL	NULL
+000519	2001-02-02	Siemens Building Technologies AG,	NULL	SCADA Device	NULL	NULL
+00053C	2001-02-02	Xircom	WiFi	Network Interface Card	NULL	NULL
+00054E	2001-02-02	Philips	WiFi	Network Interface Card	NULL	NULL
+00055D	2001-06-04	D-Link Systems, Inc.	WiFi	Network Interface Card	NULL	NULL
+000569	2001-06-04	VMware, Inc.	Virtual	Virtual Computer	VMWare	NULL
+000587	2001-06-04	Locus, Incorporated	WiFi	Network Interface Card	NULL	NULL
+000597	2001-06-04	Eagle Traffic Control Systems	NULL	SCADA Device	NULL	NULL
+0005E4	2001-06-04	Red Lion Controls Inc.	NULL	SCADA Device	NULL	NULL
+000607	2001-06-04	Omni Directional Control Technology Inc.	NULL	SCADA Device	NULL	NULL
+000625	2001-06-04	The Linksys Group, Inc.	WiFi	Network Interface Card	NULL	NULL
+000654	2001-06-04	Winpresa Building Automation Technologies GmbH	NULL	SCADA Device	NULL	NULL
+000671	2001-06-04	Softing AG	NULL	SCADA Device	NULL	NULL
+0006B1	2001-06-04	Sonicwall	WiFi	Network Interface Card	NULL	NULL
+00070E	2001-10-24	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000713	2001-10-24	IP One, Inc.	WiFi	Network Interface Card	NULL	NULL
+000740	2001-10-24	Buffalo Inc.	WiFi	Network Interface Card	NULL	NULL
+000744	2001-10-24	Unico, Inc.	NULL	SCADA Device	NULL	NULL
+000750	2001-10-24	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000785	2001-10-24	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+0007E0	2001-10-24	Palm Inc.	Bluetooth, WiFi	Smartphone	Treo	NULL
+0007EB	2001-10-24	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000821	2001-12-14	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+00086A	2001-12-14	Securiton Gmbh	NULL	SCADA Device	NULL	NULL
+0008A1	2001-12-14	CNet Technology Inc.	WiFi	Network Interface Card	NULL	NULL
+000914	2002-06-05	COMPUTROLS INC.	NULL	SCADA Device	NULL	NULL
+000943	2002-06-05	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+00095B	2002-06-05	Netgear, Inc.	WiFi	Network Interface Card	NULL	NULL
+00097C	2002-06-05	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+0009B7	2002-06-05	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+0009BF	2002-06-05	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+0009E8	2002-06-05	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000A04	2002-06-05	3Com Ltd	WiFi	Network Interface Card	NULL	NULL
+000A14	2002-06-05	TECO a.s.	NULL	SCADA Device	NULL	NULL
+000A30	2002-06-05	Visteon Corporation	NULL	SCADA Device	NULL	NULL
+000A41	2002-06-05	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000A5C	2002-10-14	Carel s.p.a.	NULL	SCADA Device	NULL	NULL
+000A80	2002-10-14	Telkonet Inc.	NULL	SCADA Device	NULL	NULL
+000A8A	2002-10-14	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000A95	2002-10-14	Apple	WiFi	Network Interface Card	NULL	NULL
+000AA6	2002-10-14	Hochiki Corporation	NULL	SCADA Device	NULL	NULL
+000AB0	2002-10-14	LOYTEC electronics GmbH	NULL	SCADA Device	NULL	NULL
+000AB7	2002-10-14	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000AE9	2002-10-14	AirVast Technology Inc.	WiFi	Network Interface Card	NULL	NULL
+000B5F	2002-10-14	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000B64	2002-10-14	Kieback & Peter GmbH & Co KG	NULL	SCADA Device	NULL	NULL
+000B6B	2002-10-14	Wistron Neweb Corp.	WiFi	Network Interface Card	NULL	NULL
+000B6C	2002-10-14	Sychip Inc.	WiFi	Network Interface Card	NULL	NULL
+000B7D	2002-10-14	SOLOMON EXTREME INTERNATIONAL LTD.	WiFi	Network Interface Card	NULL	NULL
+000B85	2002-10-14	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000B86	2002-10-14	Aruba Networks	WiFi	Network Interface Card	NULL	NULL
+000BAC	2003-02-07	3Com Ltd	WiFi	Network Interface Card	NULL	NULL
+000BBE	2003-02-07	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000BCD	2003-02-07	Hewlett-Packard Company	WiFi	Network Interface Card	NULL	NULL
+000BE6	2003-02-07	Datel Electronics	NULL	Videogame System	Datel Accessory	NULL
+000BFD	2003-02-07	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000C29	2003-02-07	VMware, Inc.	Virtual	Virtual Computer	VMWare	NULL
+000C30	2003-02-07	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000C41	2003-02-07	Cisco-Linksys	WiFi	Network Interface Card	NULL	NULL
+000C81	2003-04-11	Schneider Electric (Australia)	NULL	SCADA Device	NULL	NULL
+000C85	2003-04-11	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000CA9	2003-04-11	Ebtron Inc.	NULL	SCADA Device	NULL	NULL
+000CCE	2003-04-11	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000CE5	2003-04-11	ARRIS Group, Inc.	WiFi	Network Interface Card	NULL	NULL
+000CF1	2003-04-11	Intel Corporation	WiFi	Network Interface Card	NULL	NULL
+000D0B	2003-06-01	Buffalo Inc.	WiFi	Network Interface Card	NULL	NULL
+000D14	2003-06-01	Vtech Innovation LP dba Advanced American Telephones	WiFi	Network Interface Card	NULL	NULL
+000D19	2003-06-01	ROBE Show lighting	NULL	SCADA Device	NULL	NULL
+000D1E	2003-06-01	Control Techniques	NULL	SCADA Device	NULL	NULL
+000D28	2003-06-01	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000D29	2003-06-01	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000D3A	2003-06-01	Microsoft Corp.	WiFi	Videogame System	NULL	NULL
+000D54	2003-06-01	3Com Ltd	WiFi	Network Interface Card	NULL	NULL
+000D5D	2003-06-01	Raritan Computer, Inc	NULL	KVM / Console	Raritan	NULL
+000D65	2003-06-01	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000D72	2003-06-01	2Wire, Inc	WiFi	Network Interface Card	NULL	NULL
+000D74	2004-02-12	Sand Network Systems, Inc.	NULL	SCADA Device	NULL	NULL
+000D88	2004-02-12	D-Link Corporation	WiFi	Network Interface Card	NULL	NULL
+000D93	2004-02-12	Apple	WiFi	Network Interface Card	NULL	NULL
+000D97	2004-02-12	Tropos Networks, Inc.	WiFi	Network Interface Card	NULL	NULL
+000D9D	2004-02-12	Hewlett-Packard Company	WiFi	Network Interface Card	NULL	NULL
+000DBD	2004-02-12	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000DC8	2004-02-12	AirMagnet, Inc	NULL	Wireless NIC	NULL	NULL
+000DED	2004-02-12	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000E35	2004-02-12	Intel Corp	WiFi	Network Interface Card	NULL	NULL
+000E38	2004-02-12	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000E3B	2004-02-12	Hawking Technologies, Inc.	WiFi	Network Interface Card	NULL	NULL
+000E58	2004-02-12	Sonos, Inc.	WiFi	Network Interface Card	NULL	NULL
+000E61	2004-02-12	MICROTROL LIMITED	NULL	SCADA Device	NULL	NULL
+000E6A	2004-02-12	3Com Ltd	WiFi	Network Interface Card	NULL	NULL
+000E6B	2004-02-12	Janitza electronics GmbH	NULL	SCADA Device	NULL	NULL
+000E75	2004-02-12	New York Air Brake Corp.	NULL	SCADA Device	NULL	NULL
+000E7F	2004-02-12	Hewlett-Packard Company	WiFi	Network Interface Card	NULL	NULL
+000E83	2004-02-12	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000E84	2004-02-12	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000E9B	2004-02-12	Diffon Corporation	WiFi	Network Interface Card	NULL	NULL
+000EA6	2004-02-12	ASUSTEK COMPUTER INC.	WiFi	Network Interface Card	NULL	NULL
+000ED7	2004-02-12	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000F23	2004-02-12	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000F24	2004-02-12	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000F34	2004-02-12	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000F3D	2004-02-12	D-Link Corporation	WiFi	Network Interface Card	NULL	NULL
+000F4B	2004-02-12	Oracle Corporation	Virtual	Virtual Computer	Virtual Iron	NULL
+000F52	2004-02-12	YORK Refrigeration, Marine & Controls	NULL	SCADA Device	NULL	NULL
+000F66	2004-02-12	Cisco-Linksys	WiFi	Network Interface Card	NULL	NULL
+000F7C	2004-02-12	ACTi Corporation	NULL	Camera	NULL	NULL
+000F8F	2004-04-03	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000F90	2004-04-03	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000FB5	2004-04-03	NETGEAR Inc	WiFi	Network Interface Card	NULL	NULL
+000FE7	2004-04-03	Lutron Electronics Co., Inc.	NULL	SCADA Device	NULL	NULL
+000FEA	2004-04-03	Giga-Byte Technology Co.,LTD.	WiFi	Network Interface Card	NULL	NULL
+000FEB	2004-04-03	Cylon Controls	NULL	SCADA Device	NULL	NULL
+000FF7	2004-04-03	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+000FF8	2004-04-03	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+00108D	1998-04-22	Johnson Controls, Inc.	NULL	SCADA Device	NULL	NULL
+001090	1998-04-22	CIMETRICS, INC.	NULL	SCADA Device	NULL	NULL
+00109C	1998-04-22	M-SYSTEM CO., LTD.	NULL	SCADA Device	NULL	NULL
+0010C3	1998-04-22	CSI-CONTROL SYSTEMS	NULL	SCADA Device	NULL	NULL
+0010C6	1998-04-22	Universal Global Scientific Industrial Co., Ltd.	WiFi	Network Interface Card	NULL	NULL
+0010E7	1998-04-22	BreezeCom	WiFi	Network Interface Card	NULL	NULL
+001100	2004-04-03	Schneider Electric	NULL	SCADA Device	NULL	NULL
+001109	2004-04-15	Micro-Star International	WiFi	Network Interface Card	NULL	NULL
+00110A	2004-04-15	Hewlett-Packard Company	WiFi	Network Interface Card	NULL	NULL
+001114	2004-04-15	EverFocus Electronics Corp.	NULL	Camera	NULL	NULL
+001120	2004-06-05	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+001121	2004-06-05	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+001124	2004-06-05	Apple	WiFi	Network Interface Card	NULL	NULL
+00112F	2004-06-05	ASUSTek Computer Inc.	WiFi	Network Interface Card	NULL	NULL
+001148	2004-06-05	Prolon Control Systems	NULL	SCADA Device	NULL	NULL
+001150	2004-06-05	Belkin Corporation	WiFi	Network Interface Card	NULL	NULL
+00115C	2004-06-05	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+001188	2004-06-10	Enterasys	WiFi	Network Interface Card	NULL	NULL
+001192	2004-06-15	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+001193	2004-06-15	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+001195	2004-06-15	D-Link Corporation	WiFi	Network Interface Card	NULL	NULL
+0011BB	2004-06-30	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+0011D8	2004-07-24	ASUSTek Computer Inc.	WiFi	Network Interface Card	NULL	NULL
+0011D9	2004-07-24	TiVo	NULL	Digital Video Recorder	NULL	NULL
+0011F5	2004-07-24	ASKEY COMPUTER CORP.	WiFi	Network Interface Card	NULL	NULL
+001200	2004-08-04	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+001201	2004-08-04	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+001217	2004-08-12	Cisco-Linksys, LLC	WiFi	Network Interface Card	NULL	NULL
+001225	2004-08-19	ARRIS Group, Inc.	WiFi	Network Interface Card	NULL	NULL
+00123B	2004-09-02	KeRo Systems ApS	NULL	SCADA Device	NULL	NULL
+001243	2004-09-02	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+00125A	2004-09-12	Microsoft Corporation	NULL	Videogame System	NULL	NULL
+00127C	2004-10-10	SWEGON AB	NULL	SCADA Device	NULL	NULL
+00127F	2004-10-10	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+001280	2004-10-10	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+001288	2004-10-10	2Wire, Inc	WiFi	Network Interface Card	NULL	NULL
+0012D9	2004-11-16	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+0012DA	2004-11-16	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+0012EA	2004-11-26	Trane	NULL	SCADA Device	NULL	NULL
+0012F0	2004-11-26	Intel Corporate	WiFi	Network Interface Card	NULL	NULL
+001310	2004-12-11	Cisco-Linksys, LLC	WiFi	Network Interface Card	NULL	NULL
+001315	2004-12-15	SONY Computer Entertainment inc,	NULL	Videogame System	NULL	NULL
+001319	2004-12-15	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+00131A	2004-12-15	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+001324	2005-01-23	Schneider Electric Ultra Terminal	NULL	SCADA Device	NULL	NULL
+001345	2005-01-23	Eaton Corporation	NULL	SCADA Device	NULL	NULL
+001346	2005-01-23	D-Link Corporation	WiFi	Network Interface Card	NULL	NULL
+00135A	2005-01-23	Project T&E Limited	NULL	Videogame System	NULL	NULL
+001360	2005-01-23	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+00137F	2005-02-06	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+001380	2005-02-06	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+0013C4	2005-02-19	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+0013F7	2005-03-10	SMC Networks, Inc.	WiFi	Network Interface Card	NULL	NULL
+0013FA	2005-03-10	LifeSize Communications, Inc	NULL	Video Conferencing Device	NULL	NULL
+001444	2005-04-07	Grundfos Holding	NULL	SCADA Device	NULL	NULL
+001451	2005-04-07	Apple	WiFi	Wireless Access Point	NULL	NULL
+00146C	2005-05-07	Netgear Inc.	WiFi	Network Interface Card	NULL	NULL
+0014BF	2005-05-27	Cisco-Linksys LLC	WiFi	Network Interface Card	NULL	NULL
+0014D2	2005-06-07	Kyuden Technosystems Corporation	NULL	SCADA Device	NULL	NULL
+001546	2005-07-27	ITG Worldwide Sdn Bhd	NULL	SCADA Device	NULL	NULL
+0015C1	2005-09-09	SONY Computer Entertainment inc,	NULL	Videogame System	NULL	NULL
+0015E9	2005-09-23	D-Link Corporation	WiFi	Network Interface Card	NULL	NULL
+00160F	2005-10-13	BADGER METER INC	NULL	SCADA Device	NULL	NULL
+001615	2005-10-13	Nittan Company, Limited	NULL	SCADA Device	NULL	NULL
+00163E	2005-10-29	Xensource, Inc.	Virtual	Virtual Computer	Xen	NULL
+001656	2005-11-02	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+0016B6	2005-12-10	Cisco-Linksys	WiFi	Network Interface Card	NULL	NULL
+0016CB	2005-12-15	Apple	WiFi	Network Interface Card	NULL	NULL
+001707	2006-01-10	InGrid, Inc	NULL	Physical Access Device	NULL	The company InGrid, Inc. has changed their name to LifeShield in 2009-2010.
+001722	2006-01-27	Hanazeder Electronic GmbH	NULL	SCADA Device	NULL	NULL
+00173F	2006-02-03	Belkin Corporation	WiFi	Wireless Access Point	NULL	NULL
+001742	2006-02-03	FUJITSU LIMITED	NULL	SCADA Device	NULL	NULL
+00176B	2006-04-08	Kiyon, Inc.	NULL	SCADA Device	NULL	NULL
+001774	2006-04-08	Elesta GmbH	NULL	SCADA Device	NULL	NULL
+001788	2006-04-08	Philips Lighting BV	NULL	SCADA Device	NULL	NULL
+00179A	2006-04-08	D-Link Corporation	WiFi	Network Interface Card	NULL	NULL
+0017AB	2006-04-08	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+0017FA	2006-04-21	Microsoft Corporation	NULL	Videogame System	NULL	NULL
+001839	2006-06-13	Cisco-Linksys LLC	WiFi	Wireless Access Point	NULL	NULL
+00184D	2006-06-13	Netgear Inc.	WiFi	Wireless Access Point	NULL	NULL
+001865	2006-06-13	Siemens Healthcare Diagnostics Manufacturing Ltd	NULL	SCADA Device	NULL	NULL
+0018C7	2006-07-01	Real Time Automation	NULL	SCADA Device	NULL	NULL
+0018CF	2006-07-01	Baldor Electric Company	NULL	SCADA Device	NULL	NULL
+0018F8	2006-07-14	Cisco-Linksys LLC	WiFi	Wireless Access Point	NULL	NULL
+00191D	2006-08-15	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+001928	2006-08-15	Siemens AG, Transportation Systems	NULL	SCADA Device	NULL	NULL
+001985	2006-09-03	IT Watchdogs, Inc	NULL	SCADA Device	NULL	NULL
+001997	2006-09-25	Soft Device Sdn Bhd	NULL	SCADA Device	NULL	NULL
+0019C5	2006-09-25	SONY Computer Entertainment inc,	NULL	Videogame System	NULL	NULL
+0019EE	2006-11-02	CARLO GAVAZZI CONTROLS SPA-Controls Division	NULL	SCADA Device	NULL	NULL
+0019FD	2006-11-02	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+001A01	2006-11-02	Smiths Medical	NULL	SCADA Device	NULL	NULL
+001A82	2006-11-29	PROBA Building Automation Co.,LTD	NULL	SCADA Device	NULL	NULL
+001AAE	2006-12-12	Savant Systems LLC	NULL	SCADA Device	NULL	NULL
+001AE9	2006-12-30	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+001B08	2007-01-11	Danfoss Drives A/S	NULL	SCADA Device	NULL	NULL
+001B14	2007-01-16	Carex Lighting Equipment Factory	NULL	SCADA Device	NULL	NULL
+001B63	2007-02-09	Apple	NULL	Smartphone	iPhone	NULL
+001B65	2007-02-09	China Gridcom Co., Ltd	ITU-T G.hn	Network Access Device	NULL	NULL
+001B7A	2007-02-20	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+001BAE	2007-04-09	Micro Control Systems, Inc	NULL	SCADA Device	NULL	NULL
+001BC2	2007-04-09	Integrated Control Technology Limitied	NULL	SCADA Device	NULL	NULL
+001BEA	2007-04-09	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+001C14	2007-04-09	VMware, Inc	Virtual	Virtual Computer	VMWare	NULL
+001C30	2007-05-13	Mode Lighting (UK ) Ltd.	NULL	SCADA Device	NULL	NULL
+001C42	2007-05-13	Parallels, Inc.	Virtual	Virtual Computer	Parallells	NULL
+001C53	2007-05-13	Synergy Lighting Controls	NULL	SCADA Device	NULL	NULL
+001C5C	2007-05-13	Integrated Medical Systems, Inc.	NULL	SCADA Device	NULL	NULL
+001C8A	2007-05-13	Cirrascale Corporation	NULL	SCADA Device	NULL	NULL
+001CBE	2007-06-16	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+001CCC	2007-06-16	Research In Motion Limited	NULL	Smartphone	Blackberry	NULL
+001D35	2007-08-18	Viconics Electronics Inc.	NULL	SCADA Device	NULL	NULL
+001DBC	2007-08-18	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+001DC8	2007-09-29	Navionics Research Inc., dba SCADAmetrics	NULL	SCADA Device	NULL	NULL
+001DD8	2007-09-29	Microsoft Corporation	NULL	Videogame System	NULL	NULL
+001DED	2007-09-29	Grid Net, Inc.	NULL	SCADA Device	NULL	NULL
+001DFE	2007-09-29	Palm, Inc	Bluetooth, WiFi	Smartphone	Treo	NULL
+001E35	2007-09-29	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+001E4B	2007-09-29	City Theatrical	NULL	SCADA Device	NULL	NULL
+001E60	2007-10-04	Digital Lighting Systems, Inc	NULL	SCADA Device	NULL	NULL
+001EA9	2007-12-31	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+001F25	2007-12-31	MBS GmbH	NULL	SCADA Device	NULL	NULL
+001F32	2007-12-31	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+001FC5	2008-02-09	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+002000	1998-04-22	LEXMARK INTERNATIONAL, INC.	WiFi	Network Interface Card	NULL	NULL
+002004	1998-04-22	YAMATAKE-HONEYWELL CO., LTD.	NULL	SCADA Device	NULL	NULL
+002096	1998-04-22	Invensys	NULL	SCADA Device	NULL	NULL
+0020A6	1998-04-22	Proxim Wireless	WiFi	Network Interface Card	NULL	NULL
+0020D8	2000-09-08	Nortel Networks	WiFi	Network Interface Card	NULL	NULL
+0020E0	1998-04-22	Actiontec Electronics, Inc.	WiFi	Network Interface Card	NULL	NULL
+002147	2008-07-19	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+002199	2008-07-19	Vacon Plc	NULL	SCADA Device	NULL	NULL
+0021BD	2008-07-19	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+0021E2	2008-07-19	Creative Electronic GmbH	NULL	SCADA Device	NULL	NULL
+002248	2008-07-19	Microsoft Corporation	NULL	Videogame System	NULL	NULL
+00224C	2008-07-19	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+002295	2008-07-19	SGM Technology for lighting spa	NULL	SCADA Device	NULL	NULL
+0022AA	2008-07-19	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+0022D7	2008-07-19	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+002331	2009-06-23	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+002341	2009-06-23	Siemens AB, Infrastructure & Cities, Building Technologies Division, IC BT SSP SP BA PR	NULL	SCADA Device	NULL	NULL
+0023CC	2009-06-23	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+0023F5	2009-06-23	WILO SE	NULL	SCADA Device	NULL	NULL
+00241E	2009-06-23	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+002426	2009-06-23	NOHMI BOSAI LTD.	NULL	SCADA Device	NULL	NULL
+002444	2009-06-23	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+0024B7	2009-06-23	GridPoint, Inc.	NULL	SCADA Device	NULL	NULL
+0024F3	2009-06-23	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+002557	2009-06-23	Research In Motion	NULL	Smartphone	Blackberry	NULL
+0025A0	2009-06-23	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+002659	2009-06-23	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+0026D1	2009-07-11	S Squared Innovations Inc.	NULL	SCADA Device	NULL	NULL
+0026EC	2009-07-23	Legrand Home Systems, Inc	NULL	SCADA Device	NULL	NULL
+002709	2009-07-29	Nintendo Co., Ltd.	NULL	Videogame System	NULL	NULL
+00301A	2000-09-08	SMARTBRIDGES PTE. LTD.	WiFi	Network Interface Card	NULL	NULL
+003020	2000-09-08	TSI, Inc..	NULL	SCADA Device	NULL	NULL
+00305E	2000-09-08	Abelko Innovation	NULL	SCADA Device	NULL	NULL
+003065	2000-09-08	Apple	WiFi	Network Interface Card	NULL	NULL
+00306E	2000-09-08	HEWLETT PACKARD	WiFi	Network Interface Card	NULL	NULL
+003097	2000-09-08	AB Regin	NULL	SCADA Device	NULL	NULL
+0030AB	2000-09-08	DELTA NETWORKS, INC.	WiFi	Network Interface Card	NULL	NULL
+0030B7	2000-09-08	Teletrol Systems, Inc.	NULL	SCADA Device	NULL	NULL
+0030BD	2000-09-08	BELKIN COMPONENTS	WiFi	Network Interface Card	NULL	NULL
+0030C6	2000-09-08	CONTROL SOLUTIONS, INC.	NULL	SCADA Device	NULL	NULL
+0030DE	2000-09-08	WAGO Kontakttechnik GmbH	NULL	SCADA Device	NULL	NULL
+0030F1	2000-09-08	Accton Technology Corp.	WiFi	Network Interface Card	NULL	NULL
+00336C	2010-06-10	SynapSense Corporation	NULL	SCADA Device	NULL	NULL
+004001	1998-04-22	Zero One Technology Co. Ltd.	WiFi	Network Interface Card	NULL	NULL
+004005	2000-09-08	ANI COMMUNICATIONS INC.	WiFi	Network Interface Card	NULL	NULL
+004011	2000-09-08	ANDOVER CONTROLS CORPORATION	NULL	SCADA Device	NULL	NULL
+004026	1998-04-22	Buffalo Inc.	WiFi	Network Interface Card	NULL	NULL
+004033	1998-04-22	ADDTRON TECHNOLOGY CO., LTD.	WiFi	Network Interface Card	NULL	NULL
+004036	2000-09-08	Zoom Telephonics, Inc	WiFi	Network Interface Card	NULL	NULL
+004089	2000-09-08	MEIDENSHA CORPORATION	NULL	SCADA Device	NULL	NULL
+00408C	1998-04-22	AXIS COMMUNICATIONS AB	NULL	Camera	NULL	NULL
+004096	1998-04-22	Cisco Systems	WiFi	Network Interface Card	NULL	NULL
+0040AE	1998-04-22	DELTA CONTROLS, INC.	NULL	SCADA Device	NULL	NULL
+005006	2000-09-08	TAC AB	NULL	SCADA Device	NULL	NULL
+005008	2000-09-08	TIVA MICROCOMPUTER CORP. (TMC)	WiFi	Network Interface Card	NULL	NULL
+005018	2000-09-08	AMIT, Inc.	WiFi	Network Interface Card	NULL	NULL
+00504E	2000-09-08	SIERRA MONITOR CORP.	NULL	SCADA Device	NULL	NULL
+005056	2000-09-08	VMware, Inc.	Virtual	Virtual Computer	VMWare	NULL
+005060	2000-09-08	TANDBERG TELECOM AS	NULL	Video Conferencing Device	NULL	NULL
+0050A1	2000-09-08	CARLO GAVAZZI, INC.	NULL	SCADA Device	NULL	NULL
+0050DA	2000-09-08	3COM CORPORATION	WiFi	Network Interface Card	NULL	NULL
+0050DB	2000-09-08	CONTEMPORARY CONTROL	NULL	SCADA Device	NULL	NULL
+0050F2	2000-09-08	MICROSOFT CORP.	WiFi	Videogame System	NULL	NULL
+0050FC	2000-09-08	EDIMAX TECHNOLOGY CO., LTD.	WiFi	Network Interface Card	NULL	NULL
+006001	1998-04-22	InnoSys, Inc.	WiFi	Network Interface Card	NULL	NULL
+006017	1998-04-22	TOKIMEC INC.	NULL	SCADA Device	NULL	NULL
+00601D	1998-04-22	LUCENT TECHNOLOGIES	WiFi	Network Interface Card	NULL	NULL
+00602D	1998-04-22	ALERTON TECHNOLOGIES, INC.	NULL	SCADA Device	NULL	NULL
+006041	1998-04-22	Yokogawa Electric Corporation	NULL	SCADA Device	NULL	NULL
+00606D	1998-04-22	DIGITAL EQUIPMENT CORP.	WiFi	Network Interface Card	NULL	NULL
+0060B3	1998-04-22	Z-COM, INC.	WiFi	Network Interface Card	NULL	NULL
+008048	2000-09-08	COMPEX INCORPORATED	WiFi	Network Interface Card	NULL	NULL
+00804F	2000-09-08	DAIKIN INDUSTRIES, LTD.	NULL	SCADA Device	NULL	NULL
+008063	1998-04-22	Hirschmann Automation and Control GmbH	NULL	SCADA Device	NULL	NULL
+008067	1998-04-22	SQUARE D COMPANY	NULL	SCADA Device	NULL	NULL
+0080C6	2000-09-08	NATIONAL DATACOMM CORPORATION	WiFi	Network Interface Card	NULL	NULL
+0080C8	2000-09-08	D-LINK SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+0080F0	1998-04-22	Panasonic Communications Co., Ltd.	NULL	Camera	NULL	NULL
+009009	1998-04-22	I Controls, Inc.	NULL	SCADA Device	NULL	NULL
+00900E	1998-04-22	HANDLINK TECHNOLOGIES, INC.	WiFi	Network Interface Card	NULL	NULL
+00900F	1998-04-22	KAWASAKI HEAVY INDUSTRIES, LTD	NULL	SCADA Device	NULL	NULL
+00904B	2000-09-08	GemTek Technology Co., Ltd.	WiFi	Wireless Access Point	NULL	NULL
+00904C	2000-09-08	EPIGRAM, INC.	WiFi	Network Interface Card	NULL	NULL
+00907A	1998-04-22	Spectralink, Inc	NULL	Video Conferencing Device	NULL	NULL
+009096	2000-09-08	ASKEY COMPUTER CORP.	WiFi	Network Interface Card	NULL	NULL
+0090D1	2000-09-08	LEICHU ENTERPRISE CO., LTD.	WiFi	Network Interface Card	NULL	NULL
+00A003	1998-04-22	Siemens Switzerland Ltd., I B T HVP	NULL	SCADA Device	NULL	NULL
+00A004	1998-04-22	NETPOWER, INC.	WiFi	Network Interface Card	NULL	NULL
+00A045	1998-04-22	PHOENIX CONTACT GMBH & CO.	NULL	SCADA Device	NULL	NULL
+00A0C5	1998-04-22	ZyXEL Communications Corporation	WiFi	Network Interface Card	NULL	NULL
+00A0F8	1998-04-22	Zebra Technologies Inc	WiFi	Network Interface Card	NULL	NULL
+00B064	2000-09-08	CISCO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+00C002	1998-04-22	SERCOMM CORPORATION	WiFi	Network Interface Card	NULL	NULL
+00C016	1998-04-22	ELECTRONIC THEATRE CONTROLS	NULL	SCADA Device	NULL	NULL
+00C049	2000-09-08	U.S. ROBOTICS, INC.	WiFi	Network Interface Card	NULL	NULL
+00C07A	1998-04-22	PRIVA B.V.	NULL	SCADA Device	NULL	NULL
+00C0A8	1998-04-22	GVC CORPORATION	WiFi	Wireless Access Point	NULL	NULL
+00C0B7	1998-04-22	AMERICAN POWER CONVERSION CORP	NULL	Uninterruptible Power Supply	NULL	NULL
+00C0E4	1998-04-22	SIEMENS BUILDING	NULL	SCADA Device	NULL	NULL
+00D047	2000-09-08	XN TECHNOLOGIES	NULL	SCADA Device	NULL	NULL
+00D059	2000-09-08	AMBIT MICROSYSTEMS CORP.	WiFi	Network Interface Card	NULL	NULL
+00D06F	2000-09-08	KMC CONTROLS	NULL	SCADA Device	NULL	NULL
+00D09D	2000-09-08	VERIS INDUSTRIES	NULL	SCADA Device	NULL	NULL
+00D0D6	2000-09-08	AETHRA TELECOMUNICAZIONI	NULL	Video Conferencing Device	NULL	NULL
+00D0DB	2000-09-08	MCQUAY INTERNATIONAL	NULL	SCADA Device	NULL	NULL
+00D0E7	2000-09-08	VCON TELECOMMUNICATION LTD.	NULL	Video Conferencing Device	NULL	NULL
+00E000	1998-04-22	Fujitsu Limited	WiFi	Network Interface Card	NULL	NULL
+00E001	1998-04-22	STRAND LIGHTING LIMITED	NULL	SCADA Device	NULL	NULL
+00E029	1998-04-22	STANDARD MICROSYSTEMS CORP.	WiFi	Network Interface Card	NULL	NULL
+00E02A	1998-04-22	TANDBERG TELEVISION AS	NULL	Video Conferencing Device	NULL	NULL
+00E042	1998-04-22	Pacom Systems Ltd.	NULL	SCADA Device	NULL	NULL
+00E059	1998-04-22	CONTROLLED ENVIRONMENTS, LTD.	NULL	SCADA Device	NULL	NULL
+00E063	1998-04-22	CABLETRON - YAGO SYSTEMS, INC.	WiFi	Network Interface Card	NULL	NULL
+00E098	1998-04-22	AboCom Systems, Inc.	WiFi	Network Interface Card	NULL	NULL
+00E099	1998-04-22	SAMSON AG	NULL	SCADA Device	NULL	NULL
+00E0B8	1998-04-22	GATEWAY 2000	WiFi	Network Interface Card	NULL	NULL
+00E0C9	2000-09-08	AutomatedLogic Corporation	NULL	SCADA Device	NULL	NULL
+0180C2	2011-05-11	IEEE REGISTRATION AUTHORITY  - Please see OUI36/MA-S public listing for more information.	NULL	NULL	NULL	IEEE Standard Group Reserved\nSee: http://standards.ieee.org/develop/regauth/grpmac/public.html\n(For some reason, this particular OUI is not in the normal oui.txt listings provided from IEEE and had to be manually added)
+042605	2010-12-22	GFR Gesellschaft für Regelungstechnik und Energieeinsparung mbH	NULL	SCADA Device	NULL	NULL
+080027	2000-09-08	CADMUS COMPUTER SYSTEMS	Virtual	Virtual Computer	VirtualBox	NULL
+080046	2000-09-08	Sony Corporation	WiFi	Network Interface Card	NULL	NULL
+088F2C	2012-01-11	Hills Sound Vision & Lighting	NULL	SCADA Device	NULL	NULL
+0C8411	2009-11-21	A.O. Smith Water Products	NULL	SCADA Device	NULL	NULL
+0CD9C1	2012-06-12	Visteon Corporation	NULL	SCADA Device	NULL	NULL
+20443A	2012-04-25	Schneider Electric Asia Pacific Ltd	NULL	SCADA Device	NULL	NULL
+3018CF	2010-04-07	DEOS control systems GmbH	NULL	SCADA Device	NULL	NULL
+3831AC	2011-01-14	WEG	NULL	SCADA Device	NULL	NULL
+582EFE	2011-06-30	Lighting Science Group	NULL	SCADA Device	NULL	NULL
+6CAD3F	2011-01-22	Hubbell Building Automation, Inc.	NULL	SCADA Device	NULL	NULL
+7C6F06	2010-02-05	Caterpillar Trimble Control Technologies	NULL	SCADA Device	NULL	NULL
+884B39	2009-12-23	Siemens AG, Healthcare Sector	NULL	SCADA Device	NULL	NULL
+88ACC1	2010-05-28	Generiton Co., Ltd.	NULL	SCADA Device	NULL	NULL
+942E17	2011-11-10	Schneider Electric Canada Inc	NULL	SCADA Device	NULL	NULL
+94592D	2009-11-21	EKE Building Technology Systems Ltd	NULL	SCADA Device	NULL	NULL
+9866EA	2011-03-05	Industrial Control Communications, Inc.	NULL	SCADA Device	NULL	NULL
+D0699E	2012-03-03	LUMINEX Lighting Control Equipment	NULL	SCADA Device	NULL	NULL
+DCA7D9	2011-02-08	Compressor Controls Corp	NULL	SCADA Device	NULL	NULL
+E44F29	2010-10-13	MA Lighting Technology GmbH	NULL	SCADA Device	NULL	NULL
+E86D6E	2011-11-30	Control & Display Systems Ltd t/a CDSRail	NULL	SCADA Device	NULL	NULL
+EC5C69	2010-02-26	MITSUBISHI HEAVY INDUSTRIES MECHATRONICS SYSTEMS,LTD.	NULL	SCADA Device	NULL	NULL
+ECEA03	2011-06-16	DARFON LIGHTING CORP	NULL	SCADA Device	NULL	NULL
+F00248	2010-08-17	SmarteBuilding	NULL	SCADA Device	NULL	NULL
+F82F5B	2011-08-25	eGauge Systems LLC	NULL	SCADA Device	NULL	NULL

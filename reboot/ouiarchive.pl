@@ -17,6 +17,9 @@
 #			full reboot of DeepMac project.
 # Updated : 2014-01-18 - Finalized changes by fixing a few bugs found in testing. Added status file for tracking the last
 #			download date of a file. 
+# Updated : 2015-01-09 - Added fix for when IEEE files sometimes have CRLF terminators. File downloaded is run through dos2unix
+# Updated : 2015-05-05 - Fixed bug with checking for duplicate downloads. All the OUI files now contain a Generated: header
+#			 (as of 5/20/14) which differs even when content doesn't. Using a new (kludgy) compare method.
 
 # Initialization and configuration
 $DEBUG			= 1;
@@ -100,13 +103,22 @@ foreach $fname (keys %OUIURL) {
 		next;
 	}
 
+	# Run dos2unix on downloaded file to make sure any CRLF terminators are eliminated
+	$stat = system("/usr/bin/dos2unix $TMPDIR/$fname");
+	if ($stat) {
+		print "WARNING: dos2unix returned error\n";
+	}
+
 	# Find the location of the last update of this file
 	$date = $Last{$fname};
 	$ldate = substr($date, 0, 4) . "/" . substr($date, 4, 2) . "/" . substr($date, 6, 2);
 	debug("date = $date", "ldate = $ldate");
+
 	# Check to see if this is the same as the last file downloaded
 	debug("Checking to see if new file differs from previous one");
-	$stat = system("/usr/bin/diff -q $BASE/$ldate/$fname $TMPDIR/$fname > /dev/null");
+#	$stat = system("/usr/bin/diff -q $BASE/$ldate/$fname $TMPDIR/$fname > /dev/null");
+	$tmpstr = "\"/usr/bin/diff -q <(tail -n +2 $BASE/$ldate/$fname) <(tail -n +2 $TMPDIR/$fname) > /dev/null\"";
+	$stat = system("bash -c $tmpstr");
 	debug("stat = $stat");
 
 	# If files are the same nuke the download and quit, nothing else to do

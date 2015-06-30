@@ -4,13 +4,13 @@ use DBD::mysql;
 # Purpose: Take a tab-delimited list of OUI data with dates (say, as created
 #          by the generate.pl script) and load that data into a MySQL 
 #          database that uses the DeepMac schema.
-# Updated: 02/02/13
+# Updated: 11/23/14
 
 $|=1;
 
 # Configuration and initialization
 $DEBUG=0;
-$KB='/home/USERDIR/deepmac/kb';
+$KB='/home/USER/deepmac/kb';
 $OUICSV='/home/USERDIR/deepmac/kb/oui-dates.csv';
 $CREDFILE='/home/USERDIR/deepmac/creds.txt';
 $DBSERVER='';
@@ -202,11 +202,11 @@ print "Added $cntComp new companies to the database.\n";
 print "Added $cntPrefix new OUIs to the database.\n";
 
 # Generate a new mysqldump for public consumption
-$stat = system("/usr/bin/mysqldump -u deepread -preadonly -h $DBSERVER deepmac > /home/USERDIR/deepmac/sqldump.sql");
+$stat = system("/usr/bin/mysqldump -u deepread -preadonly -h $DBSERVER deepmac > /home/USERDIR/deepmac/deepmac.sql");
 if ($stat) {
   print "ERROR: Couldn't generate new mysqldump\n";
 } else {
-  print "Generated a new sqldump.sql file.\n";
+  print "Generated a new deepmac.sql file.\n";
 }
 
 #################################################################################################################################

@@ -7,6 +7,10 @@
 # Updated: 2014-01-18 - Revised to work with new kinds of OUI files (28 and 36 bit versions), where a range is given
 #			in the file. Range value is now extracted and given in output
 # Updated: 2014-11-03 - Fixed bug where leading/trailing whtiespace of extracted data wasn't always eliminated properly.
+# Updated: 2014-11-30 - Updated so output line is converted to UTF-8 format before printing
+# Updated: 2014-12-01 - Fixed bug with initial UTF-8 output (skipped entries in processed file)
+
+use Encode qw( decode encode );
 
 # Initialization and configuration
 $DEBUG = 0;
@@ -50,7 +54,7 @@ while ($line) {
 			debug("Entry is marked PRIVATE");
 
 			# Ok, just print what we've got and go to the next entry
-			print "$prefix	$range	$comp\n";
+			utfout("$prefix	$range	$comp\n");
 			next;
 		}
 
@@ -58,6 +62,7 @@ while ($line) {
 
 		# Read and store until we hit a NEW entry or end of file
 		while ($line !~ /\(hex\)/ && defined($line)) {
+			debug("line = $line");
 			chomp($line = shift(@oui));
 			$line =~ s/^\s+|\s+$//g;
 			push(@data, $line);
@@ -91,12 +96,11 @@ while ($line) {
 			}
 
 			# Yep, if it wasn't included than it was good ol' USA!
-			# USA! USA! USA!
 			$cn = "UNITED STATES";
 		}
 
 		# Ok, output what we have
-		print "$prefix	$range	$comp	$add1	$add2	$add3	$add4	$add5	$cn\n";
+		utfout("$prefix	$range	$comp	$add1	$add2	$add3	$add4	$add5	$cn\n");
 
 		# Clear our temp store go to next entry
 		@data = ();
@@ -126,4 +130,16 @@ sub debug(@) {
 			print "DEBUG-> $sub() $dbg\n";
 		}
 	}
+}
+
+# Subroutine that takes an input string and converts it to UTF-8 fomat before printing it
+sub utfout(@) {
+	my $instr = shift;
+	my $outstr;
+
+	# Convert to UTF-8 format
+	$outstr = decode('iso-8859-1', $instr);
+	$outstr = encode('utf-8', $outstr);
+
+	print $outstr;
 }

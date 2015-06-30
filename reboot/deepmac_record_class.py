@@ -4,13 +4,14 @@
 # Author : Jeff Mercer <jedi@jedimercer.com>
 # Purpose: Class definition for DeepMac records
 # Written: 2014/02/04
-# Updated: 2014/11/04
+# Updated: 2015/06/10
 
 # Defines class for a DeepMac record instance, which holds the data for a DeepMac Repository
 # record. Includes methods for verifying the data, getting and setting values.
 
 import logging
 import datetime
+import functools
 import simplejson as json
 
 # Logging configuration
@@ -19,7 +20,10 @@ handler = logging.StreamHandler()
 logformat = logging.Formatter("%(asctime)s - %(name)s %(levelname)s: %(message)s")
 handler.setFormatter(logformat)
 log.addHandler(handler)
-log.setLevel(logging.DEBUG)
+log.setLevel(logging.ERROR)
+
+# Pull-in functools decorator for automatic ordering. This will allow sorting an array of dmRecord objects neatly.
+@functools.total_ordering
 
 ####
 
@@ -29,8 +33,8 @@ class dmRecord:
 
 	# Internal constants for validating record format
 	rectypes = ['registry', 'metadata']
-	eventtypes = ['add', 'change', 'del']
-	ouisizes = [ 24, 28, 36]
+	eventtypes = ['add', 'change', 'delete']
+	ouisizes = [24, 28, 36]
 
 	# Mapping of option keywords to record field names, used in initializing an instance
 	fieldmap = {
@@ -176,7 +180,7 @@ class dmRecord:
 				log.warning("Required field key 'MACEnd' missing")
 				log.debug("verify() ending")
 				return False
-			elif len(self.rec['MACSEnd']) <> 12:
+			elif len(self.rec['MACEnd']) <> 12:
 				log.warning("Field key 'MACEnd' has illegal value")
 				log.debug("verify() ending")
 				return False
@@ -239,17 +243,20 @@ class dmRecord:
 	# Function to take a JSON string and populate the object with it. Returns an empty record
 	# if the resulting object is not a valid DeepMac record.
 	def setJSON(self, j):
-		# TODO: Fix this so it does proper validation on the JSON string passed in. Can't assume the
-		# TODO: json string will be a valid DeepMac record and/or values will actually be valid
-
-		log.debug("setJSON() starting")
-		try:
-			self.rec = json.loads(j)
-		except:
-			print "Failed to parse JSON string -> " + j
-			raise
-		
-		# Do a verification check
+		# Create empty records if a blank/null value is passed in
+		if j == '' or j == None:
+			log.debug("Empty JSON string passed in, creating blank record")
+			self.rec = json.loads('{"DeepMac": "registry"}')
+		else:
+			# Theoretically a valid JSON string, but will fail here if syntax is wrong
+			log.debug("setJSON() starting")
+			try:
+				self.rec = json.loads(j)
+			except:
+				print "ERROR: Failed to parse JSON string -> " + j
+				raise
+			
+		# Do a verification check, return as result
 		result = self.verify()
 		log.debug("Verify result = " + str(result))
 
@@ -320,10 +327,10 @@ class dmRecord:
 
 	def getOUI(self):
 		if 'OUI' in self.rec:
-			if self.rec['DeepMac'] == 'registry':
+			if self.rec['DeepMac'] in self.rectypes:
 				return self.rec['OUI']
 			else:
-				log.debug("Not a DeepMac registry record")
+				log.debug("Not a valid DeepMac record, invalid type %s" % (self.rec['DeepMac']))
 				return False
 		else:
 			return False
@@ -727,6 +734,7 @@ class dmRecord:
 
 		# If a JSON string was given, initialize with that first
 		if j:
+			# TODO: Verify this is a valid JSON string before initializing
 			log.debug("j = " + j)
 			self.setJSON(j)
 
@@ -739,16 +747,22 @@ class dmRecord:
 			if var in self.fieldmap and l[var] != '':
 				log.debug("Matched " + var + " key in fieldmap as " + self.fieldmap[var])
 				self.rec[self.fieldmap[var]] = l[var]
-				log.debug("Set to value " + str(l[var]))
+
+				if type(l[var]) != unicode:
+					log.debug("Set to value " + str(l[var]))
+				else:
+					log.debug("Set to value " + l[var].encode('utf8'))
 			else:
 				log.debug("Not matched in fieldmap")
 
 		log.debug("__init__ ending")
 		return None
 
-	# Overwrite attributes for comparing two instances of dmRecord
-	def __str__(self):
-		return str(self.__dict__)
+####
 
-	def __eq__(self, other): 
-		return self.__dict__ == other.__dict__
+	# Overwriting standard class definitions
+	def __eq__(self, other):
+		return (self.getEvDate() == other.getEvDate())
+
+	def __lt__(self, other):
+		return (self.getEvDate() < other.getEvDate())
