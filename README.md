@@ -3,12 +3,18 @@ deepmac
 
 The DeepMac project is an attempt to archive indefinitely all OUI records and provide additional metadata related to OUI registrations. Data can be used by IT professionals for asset management and by security professionals for recon and assessment.
 
-The code here is a long-term work-in-progress, with a focus on data and results over code quality, maintainability or efficiency. So no whinies, ;)
+The code here is a long-term work-in-progress, with a focus on data and results over code quality, maintainability or efficiency.
 Original project started in 2008 and has moved slowly. A full redesign is in progress that focuses on a better way to record metadata about OUI registrations. Future features will allow for search engines that can find new metadata to add to the journals. See below for code overview.
 
+IMPORTANT NOTES
+---------------
+Due to the nature of this project, errors in the original code led to irregularities in the database, such as duplicate Company entries, incorrect country codes and other artifacts. The author is aware of these, and intends to retire all the old code and data when the redesign is complete and functional.
 
-Requirements
-------------
+While the data for DeepMac is shared under an open license, the original base files in their curated form are considered to be under an archival copyright and are not currently available for distribution. They may be available for purchase/licensing at a future date, this has yet to be determined. You may import the SQL provided into your own instance and then start running your own archiving process of course.
+
+
+Requirements (Original codebase)
+--------------------------------
 * A webserver with PHP and MySQL support
 * PHP 5.x (4.x may actually work fine)
 * Perl 5.x

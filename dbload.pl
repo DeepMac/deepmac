@@ -4,7 +4,7 @@ use DBD::mysql;
 # Purpose: Take a tab-delimited list of OUI data with dates (say, as created
 #          by the generate.pl script) and load that data into a MySQL 
 #          database that uses the DeepMac schema.
-# Updated: 11/23/14
+# Updated: 05/01/17
 
 $|=1;
 
@@ -19,6 +19,12 @@ $date="";
 $delta=0;
 $cntComp=0;
 $cntPrefix=0;
+
+# Figure out today's date for run completion message
+(undef, undef, undef, $dd, $mm, $yy)=localtime(time);
+$yy+=1900;
+$mm++;
+$rundate="$yy-$mm-$dd";
 
 # Open credentials file to read in database creds
 open(IN, "$CREDFILE") || die "Couldn't open $CREDFILE";
@@ -198,16 +204,20 @@ close(IN);
 # Finish up
 $dbh->disconnect();
 
-print "Added $cntComp new companies to the database.\n";
-print "Added $cntPrefix new OUIs to the database.\n";
+print "Results of dbload.pl run on $rundate :\n";
+print " Added $cntComp new companies to the database.\n";
+print " Added $cntPrefix new OUIs to the database.\n";
 
 # Generate a new mysqldump for public consumption
 $stat = system("/usr/bin/mysqldump -u deepread -preadonly -h $DBSERVER deepmac > /home/USERDIR/deepmac/deepmac.sql");
 if ($stat) {
   print "ERROR: Couldn't generate new mysqldump\n";
 } else {
-  print "Generated a new deepmac.sql file.\n";
+  print "	Generated a new deepmac.sql file.\n";
 }
+
+# All done.
+print "Run completed.\n\n";
 
 #################################################################################################################################
 
