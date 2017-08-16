@@ -20,12 +20,15 @@
 # Updated : 2015-01-09 - Added fix for when IEEE files sometimes have CRLF terminators. File downloaded is run through dos2unix
 # Updated : 2015-05-05 - Fixed bug with checking for duplicate downloads. All the OUI files now contain a Generated: header
 #			 (as of 5/20/14) which differs even when content doesn't. Using a new (kludgy) compare method.
+# Updated : 2017-07-21 - Updated to change the way duplicates are detected, due to change in how IEEE generates their registry
+#			 files.
 
 # Initialization and configuration
-$DEBUG			= 1;
-$OUI2CSV		= '/home/USERDIR/deepmac/reboot/oui2csv.pl';
-$BASE			= '/home/USERDIR/deepmac/reboot/kb';
-$TMPDIR			= "/home/USERDIR/deepmac/reboot/tmp";
+$DEBUG			= 0;
+$SITEBASE		= 'YOUR-FULLY-QUALIFIED-SITE-BASE-HERE';
+$OUI2CSV		= "$SITEBASE/reboot/oui2csv.pl";
+$BASE			= "$SITEBASE/reboot/kb";
+$TMPDIR			= "$SITEBASE/reboot/tmp";
 $STATFILE		= "$BASE/.status";
 $OUIURL{'oui.txt'}	= 'http://standards.ieee.org/develop/regauth/oui/oui.txt';
 $OUIURL{'oui28.txt'}	= 'http://standards.ieee.org/develop/regauth/oui28/mam.txt';
@@ -114,33 +117,40 @@ foreach $fname (keys %OUIURL) {
 	$ldate = substr($date, 0, 4) . "/" . substr($date, 4, 2) . "/" . substr($date, 6, 2);
 	debug("date = $date", "ldate = $ldate");
 
+	# 2017-07-21: This check no longer works, as registry files are now internally arbitrarily
+	# ordered and generated daily, even if no change in actual content
+	#
 	# Check to see if this is the same as the last file downloaded
-	debug("Checking to see if new file differs from previous one");
+#	debug("Checking to see if new file differs from previous one");
 #	$stat = system("/usr/bin/diff -q $BASE/$ldate/$fname $TMPDIR/$fname > /dev/null");
-	$tmpstr = "\"/usr/bin/diff -q <(tail -n +2 $BASE/$ldate/$fname) <(tail -n +2 $TMPDIR/$fname) > /dev/null\"";
-	$stat = system("bash -c $tmpstr");
-	debug("stat = $stat");
+#	$tmpstr = "\"/usr/bin/diff -q <(tail -n +2 $BASE/$ldate/$fname) <(tail -n +2 $TMPDIR/$fname) > /dev/null\"";
+#	$stat = system("bash -c $tmpstr");
+#	debug("stat = $stat");
 
-	# If files are the same nuke the download and quit, nothing else to do
-	if ($stat == 0) {
-		debug("New $fname matched previous version in $ldate", "Deleting $TMPDIR/$fname");
-		unlink("$TMPDIR/$fname");
-
-		# Jump to next file to check
-		next;
-	} else {
-		# Update status with new date
-		$Last{$fname} = $today;
-	}
-
-	# File is different, so convert to tab delimited format
-	# NOTE: This will also happen if the files couldn't be compared, i.e. a directory missing or permissions issues. A "Safe fail".
 	debug("Calling command to convert text to tab delimited format");
 	$nfname = $fname;
 	$nfname =~ s/\.txt$/\.csv/;
 	$stat = system("$OUI2CSV $TMPDIR/$fname > $ouidir/$nfname");
 	if ($stat) {
 		print "ERROR: Problem converting $fname. Status = $stat\n";
+	}
+
+	# Check to see if newly created CSV file is different from previously generated file
+	debug("Checking to see if new oui*.csv differs from previous one");
+	$stat=system("/usr/bin/diff -q $BASE/$ldate/$nfname $ouidir/$nfname > /dev/null");
+	debug("stat = $stat");
+
+	# If files are the same nuke the download and quit, nothing else to do
+	if ($stat == 0) {
+		debug("New $fname matched previous version in $ldate (contextually)", "Deleting $TMPDIR/$fname and $ouidir/$nfname");
+		unlink("$TMPDIR/$fname");
+		unlink("$ouidir/$nfname");
+
+		# Jump to next file to check
+		next;
+	} else {
+		# Update status with new date
+		$Last{$fname} = $today;
 	}
 
 	# Move downloaded file into storage directory

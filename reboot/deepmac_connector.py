@@ -218,3 +218,7 @@ class dmConnector:
 
 		log.debug("isConnected() ending")
 		return status
+
+####
+
+# End-of-line

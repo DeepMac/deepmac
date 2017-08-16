@@ -4,16 +4,25 @@
 # Author : Jeff Mercer <jedi@jedimercer.com>
 # Purpose: Class definition for DeepMac Repository Manager
 # Written: 2014/04/25
-# Updated: 2014/12/16
+# Updated: 2017/08/14
 
 # TODO: Add additional functions:
-#			Metadata manipulation functions
-#			Statistics reporting?
+# TODO: 	Metadata manipulation functions
+# TODO: 	Statistics reporting?
+# TODO: Update logging to make better use of levels (DEBUG, ERROR, WARNING, etc)
+
+# Library of functions for managing records in DeepMac journals. Supports multiple back-end storage
+# methods (coming soon!), searching journals using multiple criteria, and updating journals with new
+# DeepMac records.
+# The dmManager library is the heart of the DeepMac Project's automation of tracking
+# official IEEE hardware address registry changes and associated metadata from multiple sources.
 
 import sys
 import os
 import re
 import logging
+import codecs
+import simplejson as json
 from deepmac_record_class import dmRecord
 from deepmac_connector import dmConnector
 
@@ -23,7 +32,7 @@ handler = logging.StreamHandler()
 logformat = logging.Formatter("%(asctime)s - %(name)s %(levelname)s: %(message)s")
 handler.setFormatter(logformat)
 log.addHandler(handler)
-log.setLevel(logging.DEBUG)
+log.setLevel(logging.ERROR)
 
 					###### Filesystem Interface ######
 
@@ -215,14 +224,14 @@ def get_by_file(dmmgr, oui):
 
 	# Open the record file, bail if error occurs
 	try:
-		fh = open(fname, "r")
+		fh = codecs.open(fname, 'r', encoding='utf-8')
 	except:
 		print "ERROR: Couldn't open file %s for reading." % (fname)
 		raise
 
 	# Read record file contents
 	try:
-		allrecs = list(fh)
+		jarr = json.load(fh)
 	except:
 		print "ERROR: Unknown error while trying to read file %s" % (fname)
 		raise
@@ -230,14 +239,14 @@ def get_by_file(dmmgr, oui):
 	# Close the record file
 	fh.close()
 
-	# Read a line from file, use as JSON string to create a new dmRecord instance
-	for line in allrecs:
-		rec = dmRecord(j = line.decode('utf8'))
-		if rec.rec == ():
-			print "WARNING: Record could not be created for JSON string %s" % (line)
+	# Process JSON array to an array of DeepMac record objects
+	for r in jarr['recs']:
+			rec = dmRecord(j = r)
+			if rec.rec == {}:
+					print "WARNING: Record could not be created for JSON string %s" % (line)
 
-		# Append to our results set
-		results.append(rec)
+			# Append to our results set
+			results.append(rec)
 
 	# Return the results set
 	log.debug("get_by_file() ending")
@@ -251,11 +260,14 @@ def add_by_file(dmmgr, rec):
 	log.debug("add_by_file() starting")
 	result = False
 	
-	# Get the OUI from this record. If there's no OUI we bail
+	# TODO: Handle conditions related to registry entry deleted or going private:
+		# 1. Existing entry is deleted (DeepMac = 'registry' and Action = 'del').
+		# 2. Deleted entry is re-registered (.deleted exists, DeepMac = 'registry' and Action = 'add').
+		# 3. Existing public entry is marked private (DeepMac = 'registry' and Action = 'change' and OrgName = 'PRIVATE').
+		# 4. Existing private entry goes Public (.private exists, DeepMac = 'registry' and Action = 'change' and OrgName != 'PRIVATE').
+
+	# Get the OUI from this record.
 	oui = rec.getOUI()
-	if not oui:
-		log.debug("Invalid or empty DeepMac record")
-		return result
 
 	# Get a path for this OUI.
 	path = dmmgr.dmh.mkOUIPath(oui)
@@ -271,34 +283,43 @@ def add_by_file(dmmgr, rec):
 			raise
 		log.debug("Path %s successfully created." % (path))
 
-	# Make the fully qualified filename specification.
+	# Make the fully qualified filename.
 	fname = path + "records"
 
-	# Open the record file for appending, bail if there's an error
-	try:
-		# This should create the file if it doesn't already exist, but will error if the directory isn't writeable
-		fh = open(fname, "a")
-	except:
-		print "ERROR: Couldn't open file %s for appending." % (fname)
-		raise
+	# Check if journal already exists
+	if os.path.isfile(fname):
+		# If it does, read it in and close the file. Fail if any errors occur
+		log.debug("Attempting to load journal file")
+		try:
+			fh = codecs.open(fname, 'r', encoding='utf-8')
+			jarr = json.load(fh)
+		except:
+			print "ERROR: Unknown error while trying to update file %s (read-in)" % (fname)
+			raise
 
-	# Append record contents to the file as a JSON string
+		# Close the file
+		fh.close()
+	else:
+		# File doesn't exist, create an empty JSON array to use
+		log.debug("Journal file doesn't exist, stubbing dict")
+		jarr = {'recs': []}
+		
+	# Append our new record to the JSON array
+	jarr['recs'].append(rec.rec)
+	log.debug("Added new record to JSON array")
+
+	# Open file for writing and attempt to write new JSON array
+	log.debug("Attempting to write updated journal")
 	try:
-		fh.write(rec.getJSON().encode('utf8'))
-		fh.write('\n')
+		fh = codecs.open(fname, 'w', encoding='utf-8')
+		json.dump(jarr, fh, ensure_ascii = False, indent = "\t", sort_keys = True)
 	except:
-		print "ERROR: Unknown error while trying to append to file %s" % (fname)
+		print "ERROR: Unknown error while trying to update file %s (write-out)" % (fname)
 		raise
-	log.debug("Appended record to journal file.")
-	
-	# Close the record file
+	log.debug("Successfully updated journal file.")
+
+	# Close file
 	fh.close()
-
-	# TODO: Handle conditions related to registry entry deleted or going private:
-		# 1. Existing entry is deleted (DeepMac = 'registry' and Action = 'del').
-		# 2. Deleted entry is re-registered (.deleted exists, DeepMac = 'registry' and Action = 'add').
-		# 3. Existing public entry is marked private (DeepMac = 'registry' and Action = 'change' and OrgName = 'PRIVATE').
-		# 4. Existing private entry goes Public (.private exists, DeepMac = 'registry' and Action = 'change' and OrgName != 'PRIVATE').
 
 	# Since (presumably) no errors occurred, set result to True
 	result = True
@@ -306,6 +327,7 @@ def add_by_file(dmmgr, rec):
 	# Return the result status
 	log.debug("add_by_file() ending")
 	return result
+
 
 
 # Function to enumerate OUIs in the repository and return as a list
@@ -326,9 +348,9 @@ def enum_by_file(dmmgr, sz, prvflag, delflag):
 		# Check if this entry is for a records file
 		if 'records' in entry[2]:
 			# Break off root path and remove slashes
-			dir = entry[0].translate(None, dmmgr.dmh.addr)
-			dir = dir.translate(None, '/')
-#			log.debug("dir = %s" % (dir))
+			dir = re.sub(dmmgr.dmh.addr, '', entry[0])
+			dir = re.sub('/', '', dir)
+			log.debug("dir = %s" % (dir))
 			
 			# Check if this OUI is a size we care about
 			if sz == 0 or len(dir) == sz/4:
@@ -343,7 +365,7 @@ def enum_by_file(dmmgr, sz, prvflag, delflag):
 
 				# Entry matches all conditions, add this OUI to our results
 				results.append(dir)
-#				log.debug("Appended %s to results" % (dir))
+				log.debug("Appended %s to results" % (dir))
 
 	### Return the result status
 	log.debug("enum_by_file() ending")
@@ -358,10 +380,9 @@ class dmManager:
 		log.debug("chkoui() starting")
 		log.debug("oui = %s" % (oui))
 
-		# Convert to string. Colons and hyphens are typically used as separators so they are ignored.
-		oui = str(oui)
-		oui = oui.translate(None, ":-")
-
+		# Colons and hyphens are typically used as separators so they are ignored.
+		oui = re.sub('[:\-]', '', oui)
+		
 		# A valid OUI specification is only hex digits, and will be 6, 7, or 9 characters long.
 		if len(oui) not in (6, 7, 9):
 			log.debug("OUI is an unexpected length of %d" % (len(oui)))
@@ -381,6 +402,7 @@ class dmManager:
 
 	# Method for getting all records for a specific OUI. Returns a list of dmRecord types,
 	# or an empty list if there are no records. Returns None if there is an error.
+	# TODO: Update the .get() function to allow optional filtering by record type, other fields
 	def get(self, oui):
 		# 'oui' is the OUI to get records for. This can be a MA-L, MA-M or MA-S number.
 		log.debug("get() starting")
@@ -409,6 +431,8 @@ class dmManager:
 			sys.exit(666)
 
 		# Sort the results. Default sorting is by the event dates
+		# TODO: Verify this will actually sort correctly!
+		# TODO: Move sorting into the get_by_* functions instead of here
 		results.sort()
 
 		log.debug("get() ending")
@@ -428,17 +452,22 @@ class dmManager:
 			print "ERROR: A connection to the repository is not established. Can't append."
 			return False
 
-		# Use connection type to determine how to append record. Call the appropriate external
-		# function and pass in a copy of the dmManager instance along with the record given.
-		if self.dmh.type == 'filesystem':
-			result = add_by_file(self, record)
-		elif self.dmh.type == 'web':
-			result = add_by_web(self, record)
-		elif self.dmh.type == 'database':
-			result = add_by_db(self, record)
+		# Verify this record is in a valid state before allowing it to be recorded
+		if not record.verify():
+			print "ERROR: Record is not in a valid state. Can not append!"
+			result = False
 		else:
-			print "ERROR: Unrecognized repository connection type, can't continue!"
-			sys.exit(666)
+			# Use connection type to determine how to append record. Call the appropriate external
+			# function and pass in a copy of the dmManager instance along with the record given.
+			if self.dmh.type == 'filesystem':
+				result = add_by_file(self, record)
+			elif self.dmh.type == 'web':
+				result = add_by_web(self, record)
+			elif self.dmh.type == 'database':
+				result = add_by_db(self, record)
+			else:
+				print "ERROR: Unrecognized repository connection type, can't continue!"
+				raise
 
 		log.debug("append() ending")
 		return result
@@ -676,8 +705,12 @@ class dmManager:
 			# TODO: Status codes/error messages stored in dmConnector class, access here
 
 			sys.exit(666)
-		else:
-			print "Connection to DeepMac repository established."
+#		else:
+#			print "Connection to DeepMac repository established."
 		
 		log.debug("__init__() ending")
 		return None
+
+####
+
+# End-of-line

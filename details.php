@@ -7,7 +7,7 @@
 # Purpose: This particular page is for showing details on a mac address
 
 # Change include search path to include the location of locally installed PEAR components
-ini_set('include_path', ini_get('include_path').PATH_SEPARATOR."/home/USERDIR/pear/php");
+ini_set('include_path', ini_get('include_path').PATH_SEPARATOR."/home/USERDIR/pear/share/pear");
 
 # For doing rendering results of searches
 require 'Structures/DataGrid.php';
@@ -15,7 +15,7 @@ require 'Structures/DataGrid.php';
 # Comment out to disable error reporting
 #	error_reporting(E_ALL);
 #	ini_set('display_errors', 1);
-#	PEAR::setErrorHandling(PEAR_ERROR_DIE); 
+#	PEAR::setErrorHandling(PEAR_ERROR_DIE);
 
 	error_reporting(E_NONE);
 

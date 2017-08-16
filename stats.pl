@@ -7,7 +7,7 @@ use DBD::mysql;
 # Configuration and initialization
 $CREDFILE='/home/USERDIR/deepmac/creds.txt';
 $dbname="deepmac";
-$dbserver="";
+$dbserver="YOUR-MYSQL-DATABASE-SERVER-HERE";
 
 # Open credentials file to read in database creds
 open(IN, "$CREDFILE") || die "Couldn't open $CREDFILE";
@@ -42,7 +42,7 @@ $stat=&dosql();
 $ouicnt=$sth->fetchrow_array;
 
 #	- Count of Unique dates for OUIs
-$sql="SELECT DISTINCT COUNT(date) FROM tb_OUI";
+$sql="SELECT COUNT(DISTINCT(date)) FROM tb_OUI";
 $stat=&dosql();
 $datecnt=$sth->fetchrow_array;
 

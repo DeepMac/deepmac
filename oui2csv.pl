@@ -4,6 +4,7 @@
 # Purpose: Take a file in the standard OUI.TXT format as distributed by IEEE, and output the data in a tabbed format
 #	   with one entry per line. Can't use commas as separators, but tsv just doesn't convey the purpose.
 # Updated: 2013-04-17 - Fixed issue that cropped up when oui.txt changed slightly. OUI is now extracted via regex.
+# Updated: 2017-07-17 - Updated to sort the resulting CSV output
 
 # Initialization and configuration
 $DEBUG=0;
@@ -25,8 +26,8 @@ while ($line) {
 
     # This is the first line of a OUI entry, extract the prefix and company name.
 
-    # (Around Feb of 2013, format of oui.txt changed slightly. Instead of a OUI starting at the
-    #  first byte of a line it now has several spaces. So switched to regex.)
+    # Around Feb of 2013, format of oui.txt changed slightly. Instead of a OUI starting at the
+    # first byte of a line it now has several spaces. So switched to regex.
 #    ($prefix)=split(/ /, $line);
 #    (undef, undef, $prefix)=split(/ /, $line);
     $line =~ m/\b((?:[ABCDEF0123456789]{2}\-){2}[ABCDEF0123456789]{2})\b/;
@@ -87,8 +88,7 @@ while ($line) {
       }
 
       # Yep, if it wasn't included than it was good ol' USA!
-      # USA! USA! USA!
-      $cn="UNITED STATES";
+      $cn="US";
     }
 
     # Eliminate excess whitespace
@@ -100,7 +100,10 @@ while ($line) {
     $add5 =~ s/	//g;
 
     # Ok, output what we have
-    print "$prefix	$comp	$add1	$add2	$add3	$add4	$add5	$cn\n";
+#    print "$prefix	$comp	$add1	$add2	$add3	$add4	$add5	$cn\n";
+
+    # Store this result in our results hash for later
+    push(@results, "$prefix	$comp	$add1	$add2	$add3	$add4	$add5	$cn\n");
 
     # Clear our temp store go to next entry
     @data=();
@@ -110,6 +113,13 @@ while ($line) {
   # Just go to next entry, these should be mostly blank lines
   $line=shift(@oui);
 }
+
+# Sort the results and output them
+@results = sort(@results);
+print @results;
+
+# All done
+exit 0;
 
 ############################################################
 

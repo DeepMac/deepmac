@@ -1,19 +1,20 @@
 #!/usr/bin/perl
-use DBD::mysql;
 # Program: dbload.pl
 # Purpose: Take a tab-delimited list of OUI data with dates (say, as created
 #          by the generate.pl script) and load that data into a MySQL 
 #          database that uses the DeepMac schema.
-# Updated: 05/01/17
+# Updated: 08/16/2017
 
+use DBD::mysql;
 $|=1;
 
 # Configuration and initialization
 $DEBUG=0;
-$KB='/home/USER/deepmac/kb';
-$OUICSV='/home/USERDIR/deepmac/kb/oui-dates.csv';
-$CREDFILE='/home/USERDIR/deepmac/creds.txt';
-$DBSERVER='';
+$SITEBASE='YOUR-FULLY-QUALIFIED-BASE-PATH-HERE';
+$KB="$SITEBASE/kb";
+$OUICSV="$KB/oui-dates.csv";
+$CREDFILE="$SITEBASE/creds.txt";
+$DBSERVER='YOUR-MYSQL-DATABASE-SERVER-HERE';
 $DBNAME='deepmac';
 $date="";
 $delta=0;
@@ -32,6 +33,11 @@ $line=<IN>;
 close(IN);
 chomp($line);
 ($dbuser, $dbpass)=split(/	/, $line);
+
+
+##
+## Begin run
+##
 
 # Determine the most recent OUI archive available, starting from the current
 # date and working backwards.
@@ -205,11 +211,11 @@ close(IN);
 $dbh->disconnect();
 
 print "Results of dbload.pl run on $rundate :\n";
-print " Added $cntComp new companies to the database.\n";
-print " Added $cntPrefix new OUIs to the database.\n";
+print "	Added $cntComp new companies to the database.\n";
+print "	Added $cntPrefix new OUIs to the database.\n";
 
 # Generate a new mysqldump for public consumption
-$stat = system("/usr/bin/mysqldump -u deepread -preadonly -h $DBSERVER deepmac > /home/USERDIR/deepmac/deepmac.sql");
+$stat = system("/usr/bin/mysqldump -u deepread -preadonly -h $DBSERVER $DBNAME > $SITEBASE/deepmac.sql");
 if ($stat) {
   print "ERROR: Couldn't generate new mysqldump\n";
 } else {

@@ -3,7 +3,7 @@
 #
 # Author: Jeff Mercer <jedi@jedimercer.com>
 # Written: 7/7/09
-# Updated: 9/3/09
+# Updated: 6/23/17
 # Purpose: Provide main page with search form and general info.
 
 include("bits/access.php");
@@ -17,11 +17,13 @@ include("bits/header.php");
 </CENTER>
 
 <FONT SIZE=+1>
-This is an alpha search interface to the DeepMac database, which itself is a grandiose project in its infancy. Do not be 
-surprised if something does not work, the search page disappears, the site gets bogged down or that the data returned is not 
-what you expected. For more details on what DeepMac is, see the <A HREF="http://www.jedimercer.com/projects/48-deepmac.html">project page</A>. 
+This is the alpha search interface to the DeepMac database, which itself is a grandiose project long in coming. 
+For more details on what DeepMac is, see the <A HREF="http://www.jedimercer.com/archives/category/projects">project page</A>. 
 For more inforation on what an OUI is, see the <A HREF="http://standards.ieee.org/regauth/registries.html">IEEE website</A> 
 as well as <A HREF="http://en.wikipedia.org/wiki/Organizationally_Unique_Identifier">this Wikipedia article</A>.
+
+A full code re-write in Python has been in the works since 2014, and the project is now <a href="https://github.com/DeepMac/deepmac/">available on github</a>, 
+with both the original Perl code and the new Python code.
 </FONT>
 <P>
 

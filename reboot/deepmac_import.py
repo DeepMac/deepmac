@@ -4,10 +4,11 @@
 # Author : Jeff Mercer <jedi@jedimercer.com>
 # Purpose: Import records from the IEEE registry archive into repository
 # Written: 2014/06/11
-# Updated: 2015/01/25
+# Updated: 2017/08/14
 
 import sys
 import os
+import re
 import logging
 import datetime
 import ConfigParser
@@ -82,47 +83,46 @@ while last <= today:
 					exit()
 				log.debug("osz = %d" % (osz))
 
-				# Read file and process for new/change/delete actions.
+				# Read CSV file and process for new/change/delete actions.
 				log.debug("Processing %s/%s" % (cwd, fname))
 				ouilist = []
 				for line in fh:
 					if line == "": continue
+
 					# TODO: Sanity-check line, make sure tab-delimited and the right number of fields, etc
-					fields = line.rstrip('\n').split('	')
+					fields = line.decode('utf8').rstrip('\n').split('	')
 					log.debug('line = %s' % (line))
-					log.debug('fields size = %d' % (len(fields)))
+					log.debug('fields count = %d' % (len(fields)))
 
 					# Extract and normalize OUI string, save in list for later deletion detection
-					oui = fields[0].translate(None, "-")
+					oui = re.sub('-', '', fields[0])
 					if osz > 24: oui = oui + fields[1][0:(osz - 24) / 4]
 					ouilist.append(oui)
 					log.debug("oui = %s" % (oui))
 
 					# Check organization name to determine if it's a private registration
-					oname = fields[2].decode('utf8')
+					oname = fields[2]
 					if oname == u'PRIVATE' or len(fields) == 3:
 						# Private registrations have no address or country of origin. Create a minimal record
-						drec = dmRecord(rectype = 'registry', source = 'IEEE', edate = last.strftime('%Y-%m-%d'), osize = osz, oui = oui, orgname=oname)
+						drec = dmRecord(rectype = u'registry', source = u'IEEE', edate = last.strftime('%Y-%m-%d').decode('utf8'), osize = osz, oui = oui, orgname=oname)
 					else:
-						log.debug("orgname = %s" % (fields[2]))
+						log.debug("orgname = %s" % (fields[2]).encode('utf8'))
 
 						# Not a private registration - Extract country
 						if len(fields) < 8:
-							country = "Unspecified"
+							country = u'Unspecified'
 						else:
 							country = fields[8]
 						log.debug("country = %s" % (country))
 
 						# Extract and normalize address
-						oa = '\n'.join(fields[3:7]).strip()
+						oa = '\\n'.join(fields[3:7]).strip()
 						if not oa:
-							oa = 'Not listed in registry'
-						else:
-							oa = oa.decode('utf8')
-						log.debug("oa = %s" % (oa))
+							oa = u'Not listed in registry'
+						log.debug("oa = %s" % (oa.encode('utf8')))
 
 						# Create a full record for this OUI registry entry
-						drec = dmRecord(rectype = 'registry', source = 'IEEE', edate = last.strftime('%Y-%m-%d'), osize = osz, oui = oui, orgname=oname, orgadd=oa, orgcn=country)
+						drec = dmRecord(rectype = u'registry', source = u'IEEE', edate = last.strftime('%Y-%m-%d').decode('utf8'), osize = osz, oui = oui, orgname=oname, orgadd=oa, orgcn=country)
 
 					# Check if any existing records exist for this OUI
 					delflag = None
@@ -132,12 +132,13 @@ while last <= today:
 						log.debug("Existing records for OUI %s found" % (oui))
 
 						# Find the most recent registry record entry and extract it.
+						# TODO: Potential failure here if loop never finds a registry record entry in the array
+						# TODO: Re-write this, it's WRONG and logically flawed. Instead just start at end of array
+						# TODO: and work backwords, stopping at the first registry entry
 						for orec in reversed(recs):
-							if orec.getType == "registry":
+							if orec.getType() == "registry":
 								break
 
-						# TODO: Potential failure here if the above loop never finds a registry record entry in the array. May need to fix.
-								
 						# Check if any changes between most recent record in journal and our current record in hand
 						if not (orec.getOrgName() == drec.getOrgName() and orec.getOrgAddr() == drec.getOrgAddr() and orec.getOrgCN() == drec.getOrgCN()):
 							# Absurdly we must "whitelist" several OUIs as they are duplicated in the official registry files, :(
@@ -163,6 +164,7 @@ while last <= today:
 						else:
 							# Last record matches current record, so no change. 
 							# But if last record was a delete action then this is a re-appearance of the OUI and needs to be recorded as an add.
+							# TODO: Fix this to use the actual flags that indicate a deleted status.
 							if orec.getEvType() == 'delete':
 								log.debug("Records matched for %s but previous record was a delete action, re-adding entry" % (oui))
 								drec.setEvType('add')
@@ -184,67 +186,6 @@ while last <= today:
 					dm.append(drec)
 					if delflag != None: dm.setDeleted(oui, delflag)
 					if prvflag != None: dm.setPrivate(oui, prvflag)
-
-#					if recs:
-#						log.debug("Existing records for OUI %s found" % (oui))
-#
-#						# Check if any changes between most recent record in journal and our current record in hand
-#						orec = recs[-1]
-#						if not (orec.getOrgName() == drec.getOrgName() and orec.getOrgAddr() == drec.getOrgAddr() and orec.getOrgCN() == drec.getOrgCN()):
-#							log.debug("orec and drec differ, OUI registry has changed")
-#
-#							# Absurdly we must "whitelist" several OUIs as they are duplicated in the official registry files, :(
-#							# This means if these entries change, the change will not be recorded.
-#							if orec.getOUI() == '0001C8' or orec.getOUI() == '080030':
-#								log.debug("Skipping whitelisted OUI %s" % (oui))
-#								continue
-#
-#							# Records differ - if previous record isn't a delete action then append this as a change record
-#							if orec.getEvType() != 'delete':
-#								# Add this as a change record type
-#								drec.setEvType('change')
-#								dm.append(drec)
-#
-#								# Determine if this record switched to/from PRIVATE mode, flip flags accordingly
-#								if drec.getOrgName() == u'PRIVATE' and orec.getOrgName() != u'PRIVATE':
-#									# Record changed to private
-#									dm.setPrivate(oui, True)
-#									log.debug("OUI %s switched to private registry." % (oui))
-#								elif drec.getOrgName() != u'PRIVATE' and orec.getOrgName() == u'PRIVATE':
-#									# Record is no longer private
-#									dm.setPrivate(oui, False)
-#									log.debug("OUI %s switched to public registry." % (oui))
-#							else:
-#								# Last record was deletion of data, record this as a new add and turn off the deleted flag
-#								log.debug("Previously deleted OUI %s has been re-registered, changes detected." % (oui))
-#								drec.setEvType('add')
-#								dm.append(drec)
-#								dm.setDeleted(oui, False)
-#
-#								# Check if this re-registered OUI is Private or not, set flag accordingly
-#								if drec.getOrgName() == u'PRIVATE':
-#									dm.setPrivate(oui, True)
-#								else:
-#									dm.setPrivate(oui, False)
-#						else:
-#							# Last record matches current record, so no change. But if last record was a delete action
-#							# then this is a re-appearance of the OUI and needs to be recorded as an add
-#							log.debug("orec and drec are the same, checking for previous delete action")
-#							if orec.getEvType() == 'delete':
-#								drec.setEvType('add')
-#								dm.append(drec)
-#								dm.setDeleted(oui, False)
-#								log.debug("Records matched but previous record was a delete action, re-adding entry")
-#					# No records found
-#					else:
-#						# Add this as a new record
-#						dm.append(drec)
-#						log.debug("No existing records for OUI %s found, treating as new" % (oui))
-#
-#						# If it's a private record, flag it as such
-#						if oname == u'PRIVATE' or len(fields) == 3:
-#							dm.setPrivate(oui, True)
-#							log.debug("Registry for OUI %s is private, set private flag." % (oui))
 
 				# Finished processing file.
 				fh.close()
@@ -293,3 +234,7 @@ cfg.set('dmimport', 'lastdate', last.strftime('%Y-%m-%d'))
 with open(basedir + 'dmimport.cfg', 'wb') as fh:
 	cfg.write(fh)
 fh.close()
+
+####
+
+# End-of-line

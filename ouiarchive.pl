@@ -11,10 +11,12 @@
 # Updated: 2013-04-18 - Fixed bug where checking for last directory in kb/ just grabbed the last file entry.
 #          It now explicitly makes a list of directories, not files. May still mis-fire though so need to look
 #          into using a more specific naming schema. Also added some more error checking.
+# Updated: 2017-07-17 - Back-ported fix for "reboot" of Deepmac codebase. Addresses the change in IEEE files having
+#	   CRLF terminators. Files downloaded are now run through dos2unix.
+
 
 # Initialization and configuration
 $DEBUG=0;
-
 $OUIURL='http://standards.ieee.org/regauth/oui/oui.txt';
 $OUI2CSV='/home/USERDIR/deepmac/oui2csv.pl';
 $BASE='/home/USERDIR/deepmac/kb';
@@ -47,7 +49,7 @@ closedir($DIR);
 
 # Sort directory listing, then take last entry as last OUI update
 @ls=sort(@ls);
-$last=$ls[$#ls-1];
+$last=$ls[$#ls];
 debug("last = $last");
 
 # Make directory and download oui to it
@@ -61,15 +63,40 @@ if ($stat) {
   exit 1;
 }
 
+# Run dos2unix on downloaded file to make sure any CRLF terminators are eliminated
+$stat = system("/usr/bin/dos2unix $BASE/$today/oui.txt");
+if ($stat) {
+  print "WARNING: dos2unix returned error\n";
+}
+
 # Check to see if this is the same as the last file downloaded
-debug("Checking to see if new oui.txt differs from previous one");
-$stat=system("/usr/bin/diff -q $BASE/$last/oui.txt $BASE/$today/oui.txt > /dev/null");
+# 2017-07-17: Discovered this is ineffective due to undetected change in generation of OUI files
+# 	      Internal order of new OUI.TXT files is effectively arbitrary, so two files can be
+#	      contextually identical but quite different otherwise.
+#debug("Checking to see if new oui.txt differs from previous one");
+#$stat=system("/usr/bin/diff -q $BASE/$last/oui.txt $BASE/$today/oui.txt > /dev/null");
+#debug("stat = $stat");
+
+# Convert to tab delimited format
+debug("Calling command to convert text to tab delimited format");
+$stat=system("$OUI2CSV $BASE/$today/oui.txt > $BASE/$today/oui.csv");
+if ($stat) {
+  print "Possible error converting. Status = $stat\n";
+  exit 1;
+}
+
+# Check to see if newly created CSV file is different from previously generated file
+debug("Checking to see if new oui.csv differs from previous one");
+$stat=system("/usr/bin/diff -q $BASE/$last/oui.csv $BASE/$today/oui.csv > /dev/null");
 debug("stat = $stat");
 
 # If files are the same nuke the download and quit, nothing else to do
 if ($stat == 0) {
-  debug("New oui.txt matched previous.", "Deleting $BASE/$today/oui.txt");
+  debug("New oui.txt matched previous (contextually).", "Deleting $BASE/$today/oui.txt");
   unlink("$BASE/$today/oui.txt");
+
+  debug("Deleting $BASE/$today/oui.csv");
+  unlink("$BASE/$today/oui.csv");
 
   debug("Deleting $BASE/$today directory");
   rmdir("$BASE/$today");
@@ -78,13 +105,6 @@ if ($stat == 0) {
   exit 0;
 }
 
-# File is different, so convert to tab delimited format
-debug("Calling command to convert text to tab delimited format");
-$stat=system("$OUI2CSV $BASE/$today/oui.txt > $BASE/$today/oui.csv");
-if ($stat) {
-  print "Possible error converting. Status = $stat\n";
-  exit 1;
-}
 
 # All done
 debug("Finished.");

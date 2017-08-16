@@ -4,10 +4,15 @@
 # Author : Jeff Mercer <jedi@jedimercer.com>
 # Purpose: Class definition for DeepMac records
 # Written: 2014/02/04
-# Updated: 2015/06/10
+# Updated: 2017/08/14
+
+# TODO: Update logging to make better use of levels (DEBUG, ERROR, WARNING, etc)
+# TODO: Actually raise exceptions with useful information!
+# TODO: Finish overriding total_ordering to get comparison / sorting right
 
 # Defines class for a DeepMac record instance, which holds the data for a DeepMac Repository
 # record. Includes methods for verifying the data, getting and setting values.
+# NOTE! All strings need to be unicode type inside rec.rec dictionary
 
 import logging
 import datetime
@@ -22,7 +27,10 @@ handler.setFormatter(logformat)
 log.addHandler(handler)
 log.setLevel(logging.ERROR)
 
-# Pull-in functools decorator for automatic ordering. This will allow sorting an array of dmRecord objects neatly.
+# Pull-in functools decorator for automatic ordering.
+#	"Given a class defining one or more rich comparison ordering methods, this class decorator supplies the rest. This simplifies the effort involved in specifying all
+#	 of the possible rich comparison # operations:
+#	 The class must define one of __lt__(), __le__(), __gt__(), or __ge__(). In addition, the class should supply an __eq__() method."
 @functools.total_ordering
 
 ####
@@ -36,7 +44,7 @@ class dmRecord:
 	eventtypes = ['add', 'change', 'delete']
 	ouisizes = [24, 28, 36]
 
-	# Mapping of option keywords to record field names, used in initializing an instance
+	# Mapping of class init parameters to DeepMAC record field names, used in initializing an instance
 	fieldmap = {
 		'rectype': 'DeepMac',
 		'source': 'Source',
@@ -243,35 +251,38 @@ class dmRecord:
 	# Function to take a JSON string and populate the object with it. Returns an empty record
 	# if the resulting object is not a valid DeepMac record.
 	def setJSON(self, j):
+		# TODO: Fail if not passed a str/unicode value
+
+		log.debug("setJSON() starting")
+
 		# Create empty records if a blank/null value is passed in
-		if j == '' or j == None:
+		if j in ['', None]:
 			log.debug("Empty JSON string passed in, creating blank record")
 			self.rec = json.loads('{"DeepMac": "registry"}')
 		else:
 			# Theoretically a valid JSON string, but will fail here if syntax is wrong
-			log.debug("setJSON() starting")
 			try:
 				self.rec = json.loads(j)
 			except:
-				print "ERROR: Failed to parse JSON string -> " + j
+				print "ERROR: Failed to parse JSON string -> %s" % (j.encode('utf8'))
 				raise
-			
+				
 		# Do a verification check, return as result
 		result = self.verify()
-		log.debug("Verify result = " + str(result))
+		log.debug("Verify result = %s" % (str(result)))
 
 		log.debug("setJSON() ending")
 		return result
 
 ####
 
-	# Function to output record in JSON format
+	# Function to output record in JSON format (string)
 	def getJSON(self):
 		log.debug("getJSON() starting")
 
 		# Create JSON string based on dictionary
 		j = json.dumps(self.rec, ensure_ascii = False, sort_keys=True)
-		log.debug("j = " + j)
+		log.debug("j = %s" % j.encode('utf8'))
 		
 		log.debug("getJSON() ending")
 		return j
@@ -281,6 +292,8 @@ class dmRecord:
 	###
 	# Functions to get record attributes
 	###
+
+	# Returns the record type, or False if the type isn't specified
 	def getType(self):
 		if 'DeepMac' in self.rec:
 			return self.rec['DeepMac']
@@ -492,18 +505,20 @@ class dmRecord:
 	def setType(self, value):
 		if value in self.rectypes:
 			self.rec['DeepMac'] = value
-			log.debug("Set record type to " + value)
+			log.debug("Set record type to %s" % (value))
 			return True
 		else:
-			log.debug("Invalid record type '" + value + "' specified")
+			log.debug("Invalid record type '%s' specified" % (value))
 			return False
 
 ####
 
 	def setSource(self, value):
+		# TODO: Make Source a more explicit list set of allowed values/types
+
 		if value != '':
 			self.rec['Source'] = value
-			log.debug("Set Source to " + value)
+			log.debug("Set Source to %s" % (value))
 			return True
 		else:
 			log.debug("Can't have empty Source")
@@ -514,10 +529,10 @@ class dmRecord:
 	def setEvType(self, value):
 		if value in self.eventtypes:
 			self.rec['EventType'] = value
-			log.debug("Set event type to " + value)
+			log.debug("Set event type to %s" % (value))
 			return True
 		else:
-			log.debug("Invalid event type '" + value + "' specified")
+			log.debug("Invalid event type '%s' specified" % (value))
 			return False
 
 ####
@@ -526,10 +541,10 @@ class dmRecord:
 		try:
 			datetime.datetime.strptime(value, '%Y-%m-%d')
 			self.rec['EventDate'] = value
-			log.debug("Set event date to " + value)
+			log.debug("Set event date to %s" % (value))
 			return True
 		except ValueError:
-			log.debug("Invalid event date '" + value + "' specified")
+			log.debug("Invalid event date '%s' specified" % (value))
 			return False
 			
 ####
@@ -540,7 +555,7 @@ class dmRecord:
 				self.rec['OUISize'] = value
 				return True
 			else:
-				log.debug("Invalid OUI size '" + value +"' specified")
+				log.debug("Invalid OUI size '%s' specified" % (value))
 				return False
 		else:
 			log.debug("Not a DeepMac registry record")
@@ -557,7 +572,7 @@ class dmRecord:
 				log.warning("OUI value incorrect length for OUI size")
 				return False
 			elif not all(char in '0123456789ABCDEF' for char in value):
-				log.warning("Invalid OUI '" + value +"' specified")
+				log.warning("Invalid OUI '%s' specified" % (value))
 				return False
 			else:
 				self.rec['OUI'] = value
@@ -611,10 +626,10 @@ class dmRecord:
 	def setMACStart(self, value):
 		if self.rec['DeepMac'] == 'metadata':
 			if len(value) <> 12:
-				log.warning("Invalid MAC '" + value + "' specified - Incorrect length")
+				log.warning("Invalid MAC '%s' specified - Incorrect length" % (value))
 				return False
 			elif not all(char in '0123456789ABCDEF' for char in value):
-				log.warning("Invalid MAC '" + value + "' specified - Non-HEX values present")
+				log.warning("Invalid MAC '%s' specified - Non-HEX values present" % (value))
 				return False
 			else:
 				self.rec['MACStart'] = value
@@ -628,10 +643,10 @@ class dmRecord:
 	def setMACEnd(self, value):
 		if self.rec['DeepMac'] == 'metadata':
 			if len(value) <> 12:
-				log.warning("Invalid MAC '" + value + "' specified - Incorrect length")
+				log.warning("Invalid MAC '%s' specified - Incorrect length" % (value))
 				return False
 			elif not all(char in '0123456789ABCDEF' for char in value):
-				log.warning("Invalid MAC '" + value + "' specified - Non-HEX values present")
+				log.warning("Invalid MAC '%s' specified - Non-HEX values present" % (value))
 				return False
 			else:
 				self.rec['MACEnd'] = value
@@ -648,7 +663,7 @@ class dmRecord:
 				self.rec['Confidence'] = value
 				return True
 			else:
-				log.debug("Invalid confidence value '" + value + "' specified")
+				log.debug("Invalid confidence value '%s' specified" % (value))
 				return False
 		else:
 			log.debug("Not a DeepMac metadata record")
@@ -726,43 +741,78 @@ class dmRecord:
 
 ####
 
+	####
+	#### Overwriting standard class definitions
+	####
+	
 	# Called upon instantiation of object
-	def __init__(self, j=u'', rectype='', source='', etype='', edate='', osize='', oui='', orgname=u'', orgadd=u'',
-				 orgcn='', mac1='', mac2='', conf='', mtype='', dtype='', dmodel='', note='', wiki=''):
+	def __init__(self, j=None, rectype=None, source=None, etype=None, edate=None, osize=None, oui=None, orgname=None,
+				 orgadd=None, orgcn=None, mac1=None, mac2=None, conf=None, mtype=None, dtype=None,
+				 dmodel=None, note=None, wiki=None):
 		log.debug("__init__ starting")		 
 		self.rec = {}
 
-		# If a JSON string was given, initialize with that first
-		if j:
-			# TODO: Verify this is a valid JSON string before initializing
-			log.debug("j = " + j)
-			self.setJSON(j)
-
+		# If first parameter is a string, initialize using it as a JSON string
+		if type(j) in (str, unicode):
+			# JSON validation will be done in SetJSON, throws exception if invalid
+			log.debug("String passed in. Treating as JSON for initialization")
+			log.debug("\tj = %s" % (j.encode('utf8')))
+			if not self.setJSON(j):
+				print "ERROR: Could not initialize dmRecord instance, failed verify check."
+				print "\t(JSON valid but DeepMac-specific requirements for record not met, see documentation)\n"
+				raise
+		# If it's a dict instead, directly pass to the "private" dict (stupid python)
+		elif type(j) == dict:
+			log.debug("Dictionary passed in, using as new record")
+			log.debug("j = %s" % (str(j)))
+			self.rec = j
+		# Ok this isn't a type we support, bugger off
+		elif type(j) != type(None):
+			log.debug("Invalid type passed as first parameter: %s" % (str(type(j))))
+			log.debug("j = %s" % (str(j)))
+			print "ERROR: Invalid type passed as first parameter, must be dict, str or unicode!\n"
+			raise 
+			
 		# Run through all keywords that could have been given. We over-write any values already initialized via
 		# JSON this way.
+		log.debug("Checking for additional passed parameters...")
 		l = locals()
-		log.debug("l = " + str(l))
 		for var in l.keys():
-			log.debug("var = " + var)
-			if var in self.fieldmap and l[var] != '':
-				log.debug("Matched " + var + " key in fieldmap as " + self.fieldmap[var])
-				self.rec[self.fieldmap[var]] = l[var]
+			if var in self.fieldmap:
+				log.debug("\tMatched '%s' key in fieldmap as '%s'" % (var, self.fieldmap[var]))
+				if l[var] != None:
+					ltype = type(l[var])
+					log.debug("\t\tType of value is %s" % (str(ltype)))
 
-				if type(l[var]) != unicode:
-					log.debug("Set to value " + str(l[var]))
+					# Assign the value to our internal record dictionary
+					self.rec[self.fieldmap[var]] = l[var]
+					log.debug("\t\tSet to value %s" % (l[var]))
 				else:
-					log.debug("Set to value " + l[var].encode('utf8'))
+					log.debug("\t\tNot initialized in call")
 			else:
-				log.debug("Not matched in fieldmap")
+				log.debug("\tLocal variable '%s' not matched in fieldmap" % (str(var)))
+
+		# TODO: Maybe issue warning that the record isn't verified yet? Do a verify but don't except if it's invalid?
 
 		log.debug("__init__ ending")
 		return None
 
-####
-
-	# Overwriting standard class definitions
+	# Override methods from functools for comparing two dmRecord instances
 	def __eq__(self, other):
 		return (self.getEvDate() == other.getEvDate())
 
 	def __lt__(self, other):
 		return (self.getEvDate() < other.getEvDate())
+
+	def __le__(self, other):
+		return (self.getEvDate() <= other.getEvDate())
+
+	def __gt__(self, other):
+		return (self.getEvDate() > other.getEvDate())
+
+	def __ge__(self, other):
+		return (self.getEvDate() >= other.getEvDate())
+
+####
+
+# End-Of-Line
