@@ -4,12 +4,15 @@
 # Author : Jeff Mercer <jedi@jedimercer.com>
 # Purpose: Class definition for DeepMac Repository Manager
 # Written: 2014/04/25
-# Updated: 2017/08/14
+# Updated: 2019/05/24
+
+# 20180125 - Adjusted logging levels, replaced many printed errors with logged, similar tweaks.
+# 20190521 - Added debug line for when a record is detected as invalid, now displays invalid record data.
+# 20190524 - Trivial clean-up of commented out code, whitespace, etc.
 
 # TODO: Add additional functions:
 # TODO: 	Metadata manipulation functions
 # TODO: 	Statistics reporting?
-# TODO: Update logging to make better use of levels (DEBUG, ERROR, WARNING, etc)
 
 # Library of functions for managing records in DeepMac journals. Supports multiple back-end storage
 # methods (coming soon!), searching journals using multiple criteria, and updating journals with new
@@ -45,18 +48,18 @@ def ispriv_by_file(dmmgr, oui):
 
 	### Check if directory exists, if not then we return None.
 	if not os.path.isdir(path):
-		log.debug("Path %s does not exist, returning None" % (path))
+		log.info("Path %s does not exist, returning None" % (path))
 		log.debug("priv_by_file() ending")
 		return None
 
 	# Check if the .private flag file exists.
 	if os.path.isfile(path + '.private'):
-		log.debug(".private flag file detected, returning True.")
+		log.info(".private flag file detected, returning True.")
 		log.debug("priv_by_file() ending")
 		return True
 
 	# No flag file found so return False
-	log.debug("No .private flag file detected, returning False.")
+	log.info("No .private flag file detected, returning False.")
 	log.debug("priv_by_file() ending")
 	return False
 
@@ -70,18 +73,18 @@ def isdel_by_file(dmmgr, oui):
 
 	### Check if directory exists, if not then we return None.
 	if not os.path.isdir(path):
-		log.debug("Path %s does not exist, returning None" % (path))
+		log.info("Path %s does not exist, returning None" % (path))
 		log.debug("isdel_by_file() ending")
 		return None
 
 	# Check if the .deleted flag file exists.
 	if os.path.isfile(path + '.deleted'):
-		log.debug(".deleted flag file detected, returning True.")
+		log.info(".deleted flag file detected, returning True.")
 		log.debug("isdel_by_file() ending")
 		return True
 
 	# No flag file found so return False
-	log.debug("No .deleted flag file detected, returning False.")
+	log.info("No .deleted flag file detected, returning False.")
 	log.debug("isdel_by_file() ending")
 	return False
 
@@ -95,7 +98,7 @@ def setdel_by_file(dmmgr, oui, bool):
 
 	### Check if directory exists, if not then we return None.
 	if not os.path.isdir(path):
-		log.debug("Path %s does not exist, returning None" % (path))
+		log.info("Path %s does not exist, returning None" % (path))
 		log.debug("setdel_by_file() ending")
 		return None
 
@@ -103,24 +106,24 @@ def setdel_by_file(dmmgr, oui, bool):
 	if os.path.isfile(path + '.deleted'):
 		# If the flag is True, nothing to actually do and we're successful
 		if bool == True:
-			log.debug(".deleted flag already exists")
+			log.info(".deleted flag already exists")
 			log.debug("setdel_by_file() ending")
 			return True
 		else:
 			# Need to delete this flag file
 			stat = os.remove(path + '.deleted')
 			if stat:
-				log.debug(".deleted flag successfully removed")
+				log.info(".deleted flag successfully removed")
 				log.debug("setdel_by_file() ending")
 				return True
 			else:
-				log.debug(".deleted flag could not be removed!")
+				log.info(".deleted flag could not be removed!")
 				log.debug("setdel_by_file() ending")
-				return False			
+				return False
 	else:
 		# If the bool flag is False, nothing to do and we're successful
 		if bool == False:
-			log.debug(".deleted flag doesn't exist, nothing to do")
+			log.info(".deleted flag doesn't exist, nothing to do")
 			log.debug("setdel_by_file() ending")
 			return True
 		else:
@@ -134,11 +137,11 @@ def setdel_by_file(dmmgr, oui, bool):
 
 			stat = os.path.isfile(path + '.deleted')
 			if stat:
-				log.debug(".deleted flag successfully created")
+				log.info(".deleted flag successfully created")
 				log.debug("setdel_by_file() ending")
 				return True
 			else:
-				log.debug(".deleted flag could not be created!")
+				log.info(".deleted flag could not be created!")
 				log.debug("setdel_by_file() ending")
 				return False
 
@@ -152,7 +155,7 @@ def setpriv_by_file(dmmgr, oui, bool):
 
 	### Check if directory exists, if not then we return None.
 	if not os.path.isdir(path):
-		log.debug("Path %s does not exist, returning None" % (path))
+		log.info("Path %s does not exist, returning None" % (path))
 		log.debug("setpriv_by_file() ending")
 		return None
 
@@ -160,24 +163,24 @@ def setpriv_by_file(dmmgr, oui, bool):
 	if os.path.isfile(path + '.private'):
 		# If the flag is True, nothing to actually do and we're successful
 		if bool == True:
-			log.debug(".private flag already exists")
+			log.info(".private flag already exists")
 			log.debug("setpriv_by_file() ending")
 			return True
 		else:
 			# Need to delete this flag file
 			stat = os.remove(path + '.private')
 			if stat:
-				log.debug(".private flag successfully removed")
+				log.info(".private flag successfully removed")
 				log.debug("setpriv_by_file() ending")
 				return True
 			else:
-				log.debug(".private flag could not be removed!")
+				log.info(".private flag could not be removed!")
 				log.debug("setpriv_by_file() ending")
-				return False			
+				return False
 	else:
 		# If the bool flag is False, nothing to do and we're successful
 		if bool == False:
-			log.debug(".private flag doesn't exist, nothing to do")
+			log.info(".private flag doesn't exist, nothing to do")
 			log.debug("setpriv_by_file() ending")
 			return True
 		else:
@@ -185,17 +188,18 @@ def setpriv_by_file(dmmgr, oui, bool):
 			try:
 				fh = open(path + '.private', 'w')
 				fh.close()
-			except:
-				print "FAILURE: Could not create %s file" % (path + '.private')
+			except Exception as e:
+				log.error("FAILURE: Could not create %s file" % (path + '.private'))
+				log.error("Exception triggered: %s" % (e))
 				raise
 
 			stat = os.path.isfile(path + '.private')
 			if stat:
-				log.debug(".private flag successfully created")
+				log.info(".private flag successfully created")
 				log.debug("setpriv_by_file() ending")
 				return True
 			else:
-				log.debug(".private flag could not be created!")
+				log.info(".private flag could not be created!")
 				log.debug("setpriv_by_file() ending")
 				return False
 
@@ -207,46 +211,56 @@ def get_by_file(dmmgr, oui):
 	# This function assumes dmmgr has a valid connection and the OUI given is a valid format!
 	results = []
 	path = dmmgr.dmh.mkOUIPath(oui)
+	log.debug("path = %s" % (path))
 
 	### Check if directory exists, if not there's no records so return an empty set
 	if not os.path.isdir(path):
-		log.debug("Path %s does not exist, returning empty set" % (path))
+		log.info("Path %s does not exist, returning empty set" % (path))
+		log.debug("get_by_file() ending")
 		return results
 
 	# Make the file file specification and store in its own variable
 	fname = path + "records"
+	log.debug("fname = %s" % (fname))
 
 	# Check if there's record file in directory, if not there's no records so return empty set
 	if not os.path.isfile(fname):
 		# TODO: Fix so access errors are reported explicitly, versus file just not existing
-		log.debug("No record file found in %s or inaccessible, returning empty set" % (path))
+		log.info("No record file found in %s or inaccessible, returning empty set" % (path))
+		log.debug("get_by_file() ending")
 		return results
 
 	# Open the record file, bail if error occurs
 	try:
 		fh = codecs.open(fname, 'r', encoding='utf-8')
-	except:
-		print "ERROR: Couldn't open file %s for reading." % (fname)
+	except Exception as e:
+		log.error("ERROR: Couldn't open file %s for reading." % (fname))
+		log.error("Exception triggered: %s" % (e))
 		raise
 
 	# Read record file contents
 	try:
 		jarr = json.load(fh)
-	except:
-		print "ERROR: Unknown error while trying to read file %s" % (fname)
+	except Exception as e:
+		log.error("ERROR: Unknown error while trying to read file %s" % (fname))
+		log.error("Exception triggered: %s" % (e))
 		raise
 
 	# Close the record file
 	fh.close()
+	log.debug("jarr length is %d" % (len(jarr)))
 
 	# Process JSON array to an array of DeepMac record objects
+	log.info("Processing JSON records into DeepMac records")
 	for r in jarr['recs']:
 			rec = dmRecord(j = r)
 			if rec.rec == {}:
-					print "WARNING: Record could not be created for JSON string %s" % (line)
+					log.warn("Record could not be created for JSON string %s" % (line))
 
 			# Append to our results set
 			results.append(rec)
+
+	log.debug("results length is %d" % (len(results)))
 
 	# Return the results set
 	log.debug("get_by_file() ending")
@@ -259,64 +273,70 @@ def add_by_file(dmmgr, rec):
 	# This function assumes dmmgr has a valid connection and rec is valid!
 	log.debug("add_by_file() starting")
 	result = False
-	
+
 	# TODO: Handle conditions related to registry entry deleted or going private:
 		# 1. Existing entry is deleted (DeepMac = 'registry' and Action = 'del').
 		# 2. Deleted entry is re-registered (.deleted exists, DeepMac = 'registry' and Action = 'add').
 		# 3. Existing public entry is marked private (DeepMac = 'registry' and Action = 'change' and OrgName = 'PRIVATE').
 		# 4. Existing private entry goes Public (.private exists, DeepMac = 'registry' and Action = 'change' and OrgName != 'PRIVATE').
+	# These cases are currently handled downstream in deepmac_import.py
 
 	# Get the OUI from this record.
 	oui = rec.getOUI()
 
 	# Get a path for this OUI.
 	path = dmmgr.dmh.mkOUIPath(oui)
+	log.debug("path = %s" % (path))
 
 	# Check if directory exists. If not, attempt to make it
 	if not os.path.exists(path):
-		log.debug("Path %s does not exist, attempting to create." % (path))
+		log.info("Path %s does not exist, attempting to create." % (path))
 		try:
 			os.makedirs(path, 0750)
-		except OSError as err:
-			print "ERROR: Couldn't make directory %s, aborting." % (path)
-			print "(Actual error message was: %s)" % (path)
+		except Exception as e:
+			log.error("Couldn't make directory %s, aborting." % (path))
+			log.error("Exception triggered: %s" % (e))
 			raise
-		log.debug("Path %s successfully created." % (path))
+		log.info("Path %s successfully created." % (path))
 
 	# Make the fully qualified filename.
 	fname = path + "records"
+	log.debug("fname = %s" % (fname))
 
 	# Check if journal already exists
 	if os.path.isfile(fname):
 		# If it does, read it in and close the file. Fail if any errors occur
-		log.debug("Attempting to load journal file")
+		log.info("Attempting to load journal file")
 		try:
 			fh = codecs.open(fname, 'r', encoding='utf-8')
 			jarr = json.load(fh)
-		except:
-			print "ERROR: Unknown error while trying to update file %s (read-in)" % (fname)
+		except Exception as e:
+			log.error("Unknown error while trying to update file %s (read-in)" % (fname))
+			log.error("Exception triggered: %s" % (e))
 			raise
 
 		# Close the file
 		fh.close()
 	else:
 		# File doesn't exist, create an empty JSON array to use
-		log.debug("Journal file doesn't exist, stubbing dict")
+		log.info("Journal file doesn't exist, stubbing dict")
 		jarr = {'recs': []}
 		
 	# Append our new record to the JSON array
 	jarr['recs'].append(rec.rec)
-	log.debug("Added new record to JSON array")
+	log.info("Added new record to JSON array")
+	log.debug("jarr length now %d" % (len(jarr)))
 
 	# Open file for writing and attempt to write new JSON array
-	log.debug("Attempting to write updated journal")
+	log.info("Attempting to write updated journal")
 	try:
 		fh = codecs.open(fname, 'w', encoding='utf-8')
 		json.dump(jarr, fh, ensure_ascii = False, indent = "\t", sort_keys = True)
-	except:
-		print "ERROR: Unknown error while trying to update file %s (write-out)" % (fname)
+	except Exception as e:
+		log.error("Unknown error while trying to update file %s (write-out)" % (fname))
+		log.error("Exception triggered: %s" % (e))
 		raise
-	log.debug("Successfully updated journal file.")
+	log.info("Successfully updated journal file.")
 
 	# Close file
 	fh.close()
@@ -331,9 +351,9 @@ def add_by_file(dmmgr, rec):
 
 
 # Function to enumerate OUIs in the repository and return as a list
-def enum_by_file(dmmgr, sz, prvflag, delflag):
+def enum_by_file(dmmgr, sz, prvflag = True, delflag = False):
 	# dmmgr is an instance of the dmManager class. This function assumes dmmgr has a valid connection!
-	# sz is the OUI size(s) to be checked, prvflag is for private records, delflag is for deleted records
+	# sz is the OUI size(s) to be checked, prvflag is for private records, delflag is for deleted records (booleans)
 	# NOTE: If not specified in original call, prvflag will be True and delflag will be False
 	log.debug("enum_by_file() starting")
 	log.debug("dmmgr.dmh.addr = %s" % (dmmgr.dmh.addr))
@@ -343,10 +363,13 @@ def enum_by_file(dmmgr, sz, prvflag, delflag):
 	results = []
 
 	# Walk through the repository directory tree
+	log.info("Walking directory %s" % (dmmgr.dmh.addr))
 	for entry in os.walk(dmmgr.dmh.addr):
-#		log.debug("entry = %s" % (str(entry)))
+		log.debug("entry = %s" % (str(entry)))
+
 		# Check if this entry is for a records file
 		if 'records' in entry[2]:
+			log.info("Found entry for records file")
 			# Break off root path and remove slashes
 			dir = re.sub(dmmgr.dmh.addr, '', entry[0])
 			dir = re.sub('/', '', dir)
@@ -357,15 +380,17 @@ def enum_by_file(dmmgr, sz, prvflag, delflag):
 				# Check flags 
 				if prvflag == False and dmmgr.isPrivate(dir):
 					# Skip this entry
+					log.info("Skipping private entry")
 					continue
 
 				if delflag == False and dmmgr.isDeleted(dir):
 					# Skip this entry
+					log.info("Skipping deleted entry")
 					continue
 
 				# Entry matches all conditions, add this OUI to our results
 				results.append(dir)
-				log.debug("Appended %s to results" % (dir))
+				log.info("Appended %s to results" % (dir))
 
 	### Return the result status
 	log.debug("enum_by_file() ending")
@@ -385,17 +410,17 @@ class dmManager:
 		
 		# A valid OUI specification is only hex digits, and will be 6, 7, or 9 characters long.
 		if len(oui) not in (6, 7, 9):
-			log.debug("OUI is an unexpected length of %d" % (len(oui)))
+			log.warn("OUI is an unexpected length of %d" % (len(oui)))
 			return False
 
 		# Try and convert to an integer. This will fail if it's not a valid hexadecimal number
 		try:
 			int(oui, 16)
 		except:
-			log.debug("OUI contains non-HEX characters (other than valid separators)")
+			log.warn("OUI contains non-HEX characters (other than valid separators)")
 			return False
 
-		log.debug("OUI value is valid")
+		log.info("OUI value is valid")
 		log.debug("chkoui() ending")
 		return True
 
@@ -410,12 +435,12 @@ class dmManager:
 
 		# Check if the OUI specified is in a valid format, bail if not
 		if not self.chkoui(oui):
-			print "WARNING: An invalid OUI of %s was specified for the get operation." % (oui)
+			log.warn("An invalid OUI of %s was specified for the get operation." % (oui))
 			return None
 
 		# Verify we have an active connection to the repository
 		if not self.dmh.isConnected():
-			print "ERROR: A connection to the repository is not established. Can't read."
+			log.warn("A connection to the repository is not established. Can't read.")
 			return None
 
 		# Use connection type to determine how to pull records. Call the appropriate external
@@ -427,12 +452,11 @@ class dmManager:
 		elif self.dmh.type == 'database':
 			results = get_by_db(self, oui)
 		else:
-			print "ERROR: Unrecognized repository connection type, can't continue!"
+			log.error("Unrecognized repository connection type, can't continue!")
 			sys.exit(666)
 
-		# Sort the results. Default sorting is by the event dates
-		# TODO: Verify this will actually sort correctly!
-		# TODO: Move sorting into the get_by_* functions instead of here
+		# Sort the results by event date in ascending order.
+		# NOTE: The sorting logic is handled in functool overloads in the dmRecord class
 		results.sort()
 
 		log.debug("get() ending")
@@ -449,12 +473,15 @@ class dmManager:
 
 		# Verify we have an active connection to the repository
 		if not self.dmh.isConnected():
-			print "ERROR: A connection to the repository is not established. Can't append."
+			log.error("A connection to the repository is not established. Can't append.")
+			log.debug("append() ending")
 			return False
 
 		# Verify this record is in a valid state before allowing it to be recorded
 		if not record.verify():
-			print "ERROR: Record is not in a valid state. Can not append!"
+			log.error("Record is not in a valid state. Can not append.")
+			log.error("Record = " + record.getJSON().encode('utf-8'))
+			log.debug("append() ending")
 			result = False
 		else:
 			# Use connection type to determine how to append record. Call the appropriate external
@@ -466,8 +493,8 @@ class dmManager:
 			elif self.dmh.type == 'database':
 				result = add_by_db(self, record)
 			else:
-				print "ERROR: Unrecognized repository connection type, can't continue!"
-				raise
+				log.error("Unrecognized repository connection type, can't continue!")
+				sys.exit(666)
 
 		log.debug("append() ending")
 		return result
@@ -486,7 +513,8 @@ class dmManager:
 		
 		# Validate sz parameter
 		if sz > 0 and sz not in (dmRecord.ouisizes):
-			print "ERROR: sz is not a valid OUI size (%d)" % (sz)
+			log.warn("sz is not a valid OUI size (%d)" % (sz))
+			log.debug("enumerate() ending")
 			return results
 
 		# Determine which enumeration process to use based on connection type
@@ -497,7 +525,7 @@ class dmManager:
 		elif self.dmh.type == 'database':
 			results = enum_by_db(self, sz, prvflag, delflag)
 		else:
-			print "ERROR: Unrecognized repository connection type, can't continue!"
+			log.error("Unrecognized repository connection type, can't continue!")
 			sys.exit(666)
 
 		log.debug("%d total results." % (len(results)))
@@ -506,6 +534,7 @@ class dmManager:
 
 
 	# Method for searching repository for all records matching specific criteria
+	# TODO: Finish writing this function
 	def search(self, oui, date, orgname, orgaddress):
 		log.debug("search() starting")
 		# Log the params given
@@ -528,13 +557,13 @@ class dmManager:
 
 		# Check if the OUI specified is in a valid format, bail if not
 		if not self.chkoui(oui):
-			print "WARNING: An invalid OUI of %s was specified for the isPrivate() check." % (oui)
+			log.warn("An invalid OUI of %s was specified for the isPrivate() check." % (oui))
 			log.debug("isPrivate() ending")
 			return None
 
 		# Verify we have an active connection to the repository
 		if not self.dmh.isConnected():
-			print "ERROR: A connection to the repository is not established. Can't check private flag."
+			log.warn("A connection to the repository is not established. Can't check private flag.")
 			log.debug("isPrivate() ending")
 			return None
 
@@ -547,7 +576,7 @@ class dmManager:
 		elif self.dmh.type == 'database':
 			result = ispriv_by_db(self, oui)
 		else:
-			print "ERROR: Unrecognized repository connection type, can't continue!"
+			log.error("Unrecognized repository connection type, can't continue!")
 			sys.exit(666)
 
 		# All done, return result of check
@@ -563,13 +592,13 @@ class dmManager:
 
 		# Check if the OUI specified is in a valid format, bail if not
 		if not self.chkoui(oui):
-			print "WARNING: An invalid OUI of %s was specified for the isDeleted() check." % (oui)
+			log.warn("An invalid OUI of %s was specified for the isDeleted() check." % (oui))
 			log.debug("isDeleted() ending")
 			return None
 
 		# Verify we have an active connection to the repository
 		if not self.dmh.isConnected():
-			print "ERROR: A connection to the repository is not established. Can't check deleted flag."
+			log.warn("A connection to the repository is not established. Can't check deleted flag.")
 			log.debug("isDeleted() ending")
 			return None
 
@@ -582,7 +611,7 @@ class dmManager:
 		elif self.dmh.type == 'database':
 			result = isdel_by_db(self, oui)
 		else:
-			print "ERROR: Unrecognized repository connection type, can't continue!"
+			log.error("Unrecognized repository connection type, can't continue!")
 			sys.exit(666)
 
 		# All done, return result of check
@@ -600,19 +629,19 @@ class dmManager:
 
 		# Check if the OUI specified is in a valid format, bail if not
 		if not self.chkoui(oui):
-			print "WARNING: An invalid OUI of %s was specified for the setDeleted() function." % (oui)
+			log.warn("An invalid OUI of %s was specified for the setDeleted() function." % (oui))
 			log.debug("setDeleted() ending")
 			return None
 
 		# Make sure bool is a True or False, anything else is not allowed
 		if bool != True and bool != False:
-			print "ERROR: Invalid value given for Deleted flag. Must use True or False."
+			log.error("Invalid value given for Deleted flag. Must use True or False.")
 			log.debug("setDeleted() ending")
 			return None
 
 		# Verify we have an active connection to the repository
 		if not self.dmh.isConnected():
-			print "ERROR: A connection to the repository is not established. Can't set deleted flag."
+			log.warn("A connection to the repository is not established. Can't set deleted flag.")
 			log.debug("setDeleted() ending")
 			return None
 
@@ -625,7 +654,7 @@ class dmManager:
 		elif self.dmh.type == 'database':
 			result = setdel_by_db(self, oui, bool)
 		else:
-			print "ERROR: Unrecognized repository connection type, can't continue!"
+			log.error("Unrecognized repository connection type, can't continue!")
 			sys.exit(666)
 
 		# All done, return result of check
@@ -642,19 +671,19 @@ class dmManager:
 
 		# Check if the OUI specified is in a valid format, bail if not
 		if not self.chkoui(oui):
-			print "WARNING: An invalid OUI of %s was specified for the setPrivate() function." % (oui)
+			log.warn("An invalid OUI of %s was specified for the setPrivate() function." % (oui))
 			log.debug("setPrivate() ending")
 			return None
 
 		# Make sure bool is a True or False, anything else is not allowed
 		if bool != True and bool != False:
-			print "ERROR: Invalid value given for Private flag. Must use True or False."
+			log.error("Invalid value given for Private flag. Must use True or False.")
 			log.debug("setPrivate() ending")
 			return None
 
 		# Verify we have an active connection to the repository
 		if not self.dmh.isConnected():
-			print "ERROR: A connection to the repository is not established. Can't set private flag."
+			log.warn("A connection to the repository is not established. Can't set private flag.")
 			log.debug("setPrivate() ending")
 			return None
 
@@ -667,7 +696,7 @@ class dmManager:
 		elif self.dmh.type == 'database':
 			result = setpriv_by_db(self, oui, bool)
 		else:
-			print "ERROR: Unrecognized repository connection type, can't continue!"
+			log.error("Unrecognized repository connection type, can't continue!")
 			sys.exit(666)
 
 		# All done, return result of check
@@ -681,8 +710,12 @@ class dmManager:
 
 		# Check if there's a valid connection handle, if so disconnect
 		if self.dmh.isConnected():
+			log.info("Connection established, disconnecting.")
 			self.dmh.disconnect()
-
+			log.info("Disconnected.")
+		else:
+			log.info("No connection, nothing to do.")
+			
 		log.debug("end() ending")
 		return None
 
@@ -701,13 +734,12 @@ class dmManager:
 
 		# Attempt to connect and report error message if there's a failure
 		if not self.dmh.connect():
-			print "ERROR: Couldn't establish DeepMac repository connection."
+			log.error("Couldn't establish DeepMac repository connection.")
 			# TODO: Status codes/error messages stored in dmConnector class, access here
 
 			sys.exit(666)
-#		else:
-#			print "Connection to DeepMac repository established."
-		
+
+		log.info("Connection to DeepMac repository established.")
 		log.debug("__init__() ending")
 		return None
 

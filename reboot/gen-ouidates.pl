@@ -8,7 +8,7 @@
 
 # Configuration
 $BASE = '/home/USERDIR/deepmac/reboot/kb';
-$DEBUG = 1;
+$DEBUG = 0;
 
 # Read in all directories in the specified directory. Sort the list.
 opendir(DIR, $BASE) || die "Couldn't open $BASE";

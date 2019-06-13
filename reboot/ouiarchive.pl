@@ -22,17 +22,18 @@
 #			 (as of 5/20/14) which differs even when content doesn't. Using a new (kludgy) compare method.
 # Updated : 2017-07-21 - Updated to change the way duplicates are detected, due to change in how IEEE generates their registry
 #			 files.
+# Updated : 2018-09-27 - Updated to use new URL's for registry files. Old URLs were still working but don't know for how long.
 
 # Initialization and configuration
-$DEBUG			= 0;
+$DEBUG			= 1;
 $SITEBASE		= 'YOUR-FULLY-QUALIFIED-SITE-BASE-HERE';
 $OUI2CSV		= "$SITEBASE/reboot/oui2csv.pl";
 $BASE			= "$SITEBASE/reboot/kb";
 $TMPDIR			= "$SITEBASE/reboot/tmp";
 $STATFILE		= "$BASE/.status";
-$OUIURL{'oui.txt'}	= 'http://standards.ieee.org/develop/regauth/oui/oui.txt';
-$OUIURL{'oui28.txt'}	= 'http://standards.ieee.org/develop/regauth/oui28/mam.txt';
-$OUIURL{'oui36.txt'}	= 'http://standards.ieee.org/develop/regauth/oui36/oui36.txt';
+$OUIURL{'oui.txt'}	= 'http://standards-oui.ieee.org/oui/oui.txt';
+$OUIURL{'oui28.txt'}	= 'http://standards-oui.ieee.org/oui28/mam.txt';
+$OUIURL{'oui36.txt'}	= 'http://standards-oui.ieee.org/oui36/oui36.txt';
 
 debug("==- Starting a new run -==");
 

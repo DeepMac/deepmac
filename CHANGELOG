@@ -1,0 +1,10 @@
+2019-06-13
+	- Added a changelog!
+	  (Note: You can find summaries of changes in both scripts in the comments at the top)
+	- Updated to use most recent fixes from May 2019 for some long sought-after bugs with importing
+	  IEEE source files into the journal.
+	- Some misc. bug fixes for changes in IEEE distribution of registry files (location, format, etc)
+	- verify() function in deepmac_record_class.py no longer fails on blank orgnames
+	- deepmac_import.py now does case-insensitive comparisons between records in the journal. This
+	  eliminates logging of trivial changes from the IEEE source.
+

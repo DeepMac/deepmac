@@ -4,16 +4,21 @@
 # Author : Jeff Mercer <jedi@jedimercer.com>
 # Purpose: Class definition for DeepMac records
 # Written: 2014/02/04
-# Updated: 2017/08/14
+# Updated: 2019/05/24
+### Defines class for a DeepMac record instance, which holds the data for a DeepMac Repository
+### record. Includes methods for verifying the data, getting and setting values, etc.
 
-# TODO: Update logging to make better use of levels (DEBUG, ERROR, WARNING, etc)
 # TODO: Actually raise exceptions with useful information!
 # TODO: Finish overriding total_ordering to get comparison / sorting right
 
-# Defines class for a DeepMac record instance, which holds the data for a DeepMac Repository
-# record. Includes methods for verifying the data, getting and setting values.
-# NOTE! All strings need to be unicode type inside rec.rec dictionary
+# 20180128 - Updated logging levels, replaced printed errors with log statements, similar tweaks.
+# 20180129 - Disabled checking of OrgCountry being blank due to frequency of country missing in IEEE data.
+#			 Removed use of type() calls, use isinstance() instead.
+# 20190521 - Updated method for detecting Private registrations to ignore case.
+# 20190522 - Disabled check of blank OrgName in .verify() function, due to inconsistencies in IEEE data format.
+# 20190524 - Trivial clean-up of whitespace, commented-out code.
 
+# Required libraries
 import logging
 import datetime
 import functools
@@ -33,16 +38,19 @@ log.setLevel(logging.ERROR)
 #	 The class must define one of __lt__(), __le__(), __gt__(), or __ge__(). In addition, the class should supply an __eq__() method."
 @functools.total_ordering
 
-####
+###############################################################################
 
+# So it begins
 class dmRecord:
 	# Initial dictionary for holding record
 	rec = {}
 
 	# Internal constants for validating record format
+	# TODO: Put these in a constants class to be included in all DeepMac code
 	rectypes = ['registry', 'metadata']
 	eventtypes = ['add', 'change', 'delete']
 	ouisizes = [24, 28, 36]
+#	privacyflags = [u'PRIVATE', u'Private']
 
 	# Mapping of class init parameters to DeepMAC record field names, used in initializing an instance
 	fieldmap = {
@@ -69,204 +77,176 @@ class dmRecord:
 	
 	# Function to verify we have a valid DeepMac record. Returns True if the structure
 	# is an expected record type and values conform. Otherwise returns False.
+
+	# TODO: Check to make sure all string value tests work regardless if str/unicode type
 	def verify(self):
 		log.debug("verify() starting")
+		status = True
 
 		# Look for DeepMac indicator field
 		if 'DeepMac' not in self.rec:
 			log.warning("Required field key 'DeepMac' missing")
-			log.debug("verify() ending")
-			return False
+			status = False
 		elif self.rec['DeepMac'] not in self.rectypes:
 			log.warning("Field key 'DeepMac' has illegal value")
-			log.debug("verify() ending")
-			return False
+			status = False
 
 		# Verify common fields for all DeepMac record types
 		if 'Source' not in self.rec:
 			log.warning("Required field key 'Source' missing")
-			log.debug("verify() ending")
-			return False
+			status = False
 		elif self.rec['Source'] == '':
 			log.warning("Field key 'EventType' has illegal value (empty)")
-			log.debug("verify() ending")
-			return False
+			status = False
 
 		if 'EventType' not in self.rec:
 			log.warning("Required field key 'EventType' missing")
-			log.debug("verify() ending")
-			return False
+			status = False
 		elif self.rec['EventType'] not in self.eventtypes:
 			log.warning("Field key 'EventType' has illegal value")
-			log.debug("verify() ending")
-			return False
+			status = False
 
 		if 'EventDate' not in self.rec:
 			log.warning("Required field key 'EventDate' missing")
-			log.debug("verify() ending")
-			return False
+			status = False
 		else:
 			try:
 				datetime.datetime.strptime(self.rec['EventDate'], '%Y-%m-%d')
 			except ValueError:
 				log.warning("Field key 'EventDate' has illegal value")
-				log.debug("verify() ending")
-				return False
+				status = False
 
 		# Depending on record type, verify remaining possible fields
 		if self.rec['DeepMac'] == 'registry':
 			if 'OUISize' not in self.rec:
 				log.warning("Required field key 'OUISize' missing")
-				log.debug("verify() ending")
-				return False
+				status = False
 			elif self.rec['OUISize'] not in self.ouisizes:
 				log.warning("Field key 'OUISize' has illegal value")
-				log.debug("verify() ending")
-				return False
+				status = False
 
 			if 'OUI' not in self.rec:
 				log.warning("Required field key 'OUI' missing")
-				log.debug("verify() ending")
-				return False
+				status = False
 			if len(self.rec['OUI']) <> (self.rec['OUISize'] / 4):
 				log.warning("Field key 'OUI' has illegal value (incorrect length for OUI size)")
-				log.debug("verify() ending")
-				return False
+				status = False
 			elif not all(char in '0123456789ABCDEF' for char in self.rec['OUI']):
 				log.warning("Field key 'OUI' has illegal value (non-HEX digits)")
-				log.debug("verify() ending")
-				return False
+				status = False
 
 			if 'OrgName' not in self.rec:
 				log.warning("Required field key 'OrgName' missing")
-				log.debug("verify() ending")
-				return False
-			if self.rec['OrgName'] == '' :
-				log.warning("Field key 'OrgName' has illegal value")
-				log.debug("verify() ending")
-				return False
+				status = False
+# Disabled check on 2019-05-19. Too many cases of private registrations having a blank OrgName, :(
+#			if self.rec['OrgName'] == '' :
+#				log.warning("Field key 'OrgName' has illegal value")
+#				status = False
 
 			# Only public registry entries should have address info
-			if self.rec['OrgName'] != 'PRIVATE':
+			if self.rec['OrgName'].lower() != u'private' and self.rec['OrgName'] != '':
 				if 'OrgAddress' not in self.rec:
 					log.warning("Required field key 'OrgAddress' missing")
-					log.debug("verify() ending")
-					return False
+					status = False
 				if self.rec['OrgAddress'] == '':
 					log.warning("Field key 'OrgAddress' has illegal value")
-					log.debug("verify() ending")
-					return False
+					status = False
 
 				if 'OrgCountry' not in self.rec:
 					log.warning("Required field key 'OrgCountry' missing")
-					log.debug("verify() ending")
-					return False
-				if self.rec['OrgCountry'] == '':
-					log.warning("Field key 'OrgCountry' has illegal value")
-					log.debug("verify() ending")
-					return False
+					status = False
+				# Originally we were going to consider a record bad with no country, but IEEE data now frequently has
+				# bad entries with missing addresses, countries, etc. Disabled this check as of 1/29/19.
+#				if self.rec['OrgCountry'] == '':
+#					log.warning("Field key 'OrgCountry' has illegal value")
+#					status = False
 
 			# If we reach here, it's a valid registry record
 			log.debug("verify() ending")
-			return True
-			
+			return status
 		elif self.rec['DeepMac'] == 'metadata':
 			if 'MACStart' not in self.rec:
 				log.warning("Required field key 'MACStart' missing")
-				log.debug("verify() ending")
-				return False
+				status = False
 			elif len(self.rec['MACStart']) <> 12:
 				log.warning("Field key 'MACStart' has illegal value (incorrect length)")
-				log.debug("verify() ending")
-				return False
+				status = False
 			elif not all(char in '0123456789ABCDEF' for char in self.rec['MACStart']):
 				log.warning("Field key 'MACStart' has illegal value (invalid HEX digits)")
-				log.debug("verify() ending")
-				return False
-			
+				status = False
+
 			if 'MACEnd' not in self.rec:
 				log.warning("Required field key 'MACEnd' missing")
-				log.debug("verify() ending")
-				return False
+				status = False
 			elif len(self.rec['MACEnd']) <> 12:
 				log.warning("Field key 'MACEnd' has illegal value")
-				log.debug("verify() ending")
-				return False
+				status = False
 			elif not all(char in '0123456789ABCDEF' for char in self.rec['MACEnd']):
 				log.warning("Field key 'MACEnd' has illegal value")
-				log.debug("verify() ending")
-				return False
+				status = False
 
 			if 'Confidence' not in self.rec:
 				log.warning("Required field key 'Confidence' missing")
-				log.debug("verify() ending")
-				return False
+				status = False
 			elif self.rec['Confidence'] < 1 or self.rec['Confidence'] > 5 or not isinstance(self.rec['Confidence'], int):
 				log.warning("Field key 'Confidence' has illegal value")
-				log.debug("verify() ending")
-				return False
+				status = False
 
 			if 'MediaType' in self.rec:
 				if self.rec['MediaType'] == '':
 					log.warning("Field key 'MediaType' has illegal value")
-					log.debug("verify() ending")
-					return False
+					status = False
 
 			if 'DevType' in self.rec:
 				if self.rec['DevType'] == '':
 					log.warning("Field key 'DevType' has illegal value")
-					log.debug("verify() ending")
-					return False
+					status = False
 
 			if 'DevModel' in self.rec:
 				if self.rec['DevModel'] == '':
 					log.warning("Field key 'DevModel' has illegal value")
-					log.debug("verify() ending")
-					return False
+					status = False
 
 			if 'Note' in self.rec:
 				if self.rec['Note'] == '':
 					log.warning("Field key 'Note' has illegal value")
-					log.debug("verify() ending")
-					return False
+					status = False
 
 			if 'WikiLink' in self.rec:
 				if self.rec['WikiLink'] == '':
 					log.warning("Field key 'WikiLink' has illegal value")
-					log.debug("verify() ending")
-					return False
+					status = False
 
 			# If we reach here, it's a valid metadata record
 			log.debug("verify() ending")
-			return True
-
+			return status
 		else:
 			# Shouldn't reach here, so if we do something is corrupt or logic errors
-			log.debug("Reached impossible termination point")
+			log.error("Reached impossible termination point")
 			log.debug("verify() ending")
 			return False
-			
+
 ####
 
-	# Function to take a JSON string and populate the object with it. Returns an empty record
-	# if the resulting object is not a valid DeepMac record.
+	# Function to take a JSON string and populate the object with it. Returns True if
+	# the resulting state of the record is good, otherwise returns False.
+	# TODO: Fail if not passed a str/unicode value
 	def setJSON(self, j):
-		# TODO: Fail if not passed a str/unicode value
-
 		log.debug("setJSON() starting")
 
 		# Create empty records if a blank/null value is passed in
 		if j in ['', None]:
-			log.debug("Empty JSON string passed in, creating blank record")
+			log.info("Empty JSON string passed in, creating blank record")
 			self.rec = json.loads('{"DeepMac": "registry"}')
 		else:
 			# Theoretically a valid JSON string, but will fail here if syntax is wrong
 			try:
 				self.rec = json.loads(j)
-			except:
-				print "ERROR: Failed to parse JSON string -> %s" % (j.encode('utf8'))
+			except Exception as e:
+				log.error("Failed to parse JSON string -> %s" % (j.encode('utf8')))
+				log.error("Exception triggered: %s" % (e))
 				raise
-				
+
 		# Do a verification check, return as result
 		result = self.verify()
 		log.debug("Verify result = %s" % (str(result)))
@@ -276,22 +256,20 @@ class dmRecord:
 
 ####
 
-	# Function to output record in JSON format (string)
+	# Function to output record in JSON format (string).
 	def getJSON(self):
 		log.debug("getJSON() starting")
 
-		# Create JSON string based on dictionary
+		# Create JSON string based on dictionary. JSON keys are sorted and non-ASCII characters are left as-is
 		j = json.dumps(self.rec, ensure_ascii = False, sort_keys=True)
 		log.debug("j = %s" % j.encode('utf8'))
-		
+
 		log.debug("getJSON() ending")
 		return j
-		
-####
 
-	###
-	# Functions to get record attributes
-	###
+###
+# Functions to get record attributes
+###
 
 	# Returns the record type, or False if the type isn't specified
 	def getType(self):
@@ -302,6 +280,7 @@ class dmRecord:
 
 ####
 
+	# Returns the source for the record, or False if Source not specified
 	def getSource(self):
 		if 'Source' in self.rec:
 			return self.rec['Source']
@@ -310,6 +289,7 @@ class dmRecord:
 
 ####
 
+	# Returns the Event Type for the record, or False if Event Type not specified
 	def getEvType(self):
 		if 'EventType' in self.rec:
 			return self.rec['EventType']
@@ -318,6 +298,7 @@ class dmRecord:
 
 ####
 
+	# Returns the Event Date for the record, or False if Event Date not specified
 	def getEvDate(self):
 		if 'EventDate' in self.rec:
 			return self.rec['EventDate']
@@ -326,47 +307,51 @@ class dmRecord:
 
 ####
 
+	# Returns the OUI size for the record, or False if OUI Size not specified
 	def getSize(self):
 		if 'OUISize' in self.rec:
 			if self.rec['DeepMac'] == 'registry':
 				return self.rec['OUISize']
 			else:
-				log.debug("Not a DeepMac registry record")
+				log.warn("Not a DeepMac registry record")
 				return False
 		else:
 			return False
 
 ####
 
+	# Returns the OUI for the record, or False if OUI not specified
 	def getOUI(self):
 		if 'OUI' in self.rec:
 			if self.rec['DeepMac'] in self.rectypes:
 				return self.rec['OUI']
 			else:
-				log.debug("Not a valid DeepMac record, invalid type %s" % (self.rec['DeepMac']))
+				log.warn("Not a valid DeepMac record, invalid type %s" % (self.rec['DeepMac']))
 				return False
 		else:
 			return False
 
 ####
 
+	# Returns the Organization Name for the record, or False if Organization Name not specified
 	def getOrgName(self):
 		if 'OrgName' in self.rec:
 			if self.rec['DeepMac'] == 'registry':
 				return self.rec['OrgName']
 			else:
-				log.debug("Not a DeepMac registry record")
+				log.warn("Not a DeepMac registry record")
 				return False
 		else:
 			return False
 
 ####
 
+	# Returns the Organization Address for the record, or False if Organization Address not specified
 	def getOrgAddr(self):
 		if 'OrgAddress' in self.rec:
 			if self.rec['DeepMac'] == 'registry':
-				if self.rec['OrgName'] == 'PRIVATE':
-					return 'PRIVATE'
+				if self.rec['OrgName'].lower() == u'private':
+					return u'PRIVATE'
 				else:
 					return self.rec['OrgAddress']
 			else:
@@ -377,11 +362,12 @@ class dmRecord:
 
 ####
 
+	# Returns the Organization Country for the record, or False if Organization Country not specified
 	def getOrgCN(self):
 		if 'OrgCountry' in self.rec:
 			if self.rec['DeepMac'] == 'registry':
-				if self.rec['OrgName'] == 'PRIVATE':
-					return 'PRIVATE'
+				if self.rec['OrgName'].lower() == u'private':
+					return u'PRIVATE'
 				else:
 					return self.rec['OrgCountry']
 			else:
@@ -392,42 +378,46 @@ class dmRecord:
 
 ####
 
+	# Returns the starting MAC address for the record (metadata types only), or False if not specified
 	def getMACStart(self):
 		if 'MACStart' in self.rec:
 			if self.rec['DeepMac'] == 'metadata':
 				return self.rec['MACStart']
 			else:
-				log.debug("Not a DeepMac metadata record")
+				log.warn("Not a DeepMac metadata record")
 				return False
 		else:
 			return False
 
 ####
 
+	# Returns the ending MAC address for the record (metadata types only), or False if not specified
 	def getMACEnd(self):
 		if 'MACEnd' in self.rec:
 			if self.rec['DeepMac'] == 'metadata':
 				return self.rec['MACEnd']
 			else:
-				log.debug("Not a DeepMac metadata record")
+				log.warn("Not a DeepMac metadata record")
 				return False
 		else:
 			return False
 
 ####
 
+	# Returns the confidence level for the record (metadata types only), or False if not specified
 	def getConf(self):
 		if 'Confidence' in self.rec:
 			if self.rec['DeepMac'] == 'metadata':
 				return self.rec['Confidence']
 			else:
-				log.debug("Not a DeepMac metadata record")
+				log.warn("Not a DeepMac metadata record")
 				return False
 		else:
 			return False
 
 ####
 
+	# Returns the Media Type for the record (metadata types only), or False if not specified
 	def getMedia(self):
 		if 'MediaType' in self.rec:
 			if self.rec['DeepMac'] == 'metadata':
@@ -436,13 +426,14 @@ class dmRecord:
 				else:
 					return 'Unknown'
 			else:
-				log.debug("Not a DeepMac metadata record")
+				log.warn("Not a DeepMac metadata record")
 				return False
 		else:
 			return False
 
 ####
 
+	# Returns the Device Type for the record (metadata types only), or False if not specified
 	def getDevice(self):
 		if 'DevType' in self.rec:
 			if self.rec['DeepMac'] == 'metadata':
@@ -451,13 +442,14 @@ class dmRecord:
 				else:
 					return 'Unknown'
 			else:
-				log.debug("Not a DeepMac metadata record")
+				log.warn("Not a DeepMac metadata record")
 				return False
 		else:
 			return False
 
 ####
 
+	# Returns the Device Model for the record (metadata types only), or False if not specified
 	def getModel(self):
 		if 'DevModel' in self.rec:
 			if self.rec['DeepMac'] == 'metadata':
@@ -466,13 +458,14 @@ class dmRecord:
 				else:
 					return 'Unknown'
 			else:
-				log.debug("Not a DeepMac metadata record")
+				log.warn("Not a DeepMac metadata record")
 				return False
 		else:
 			return False
 
 ####
 
+	# Returns the Notes for the record (metadata types only), or False if not specified
 	def getNote(self):
 		if 'Note' in self.rec:
 			if self.rec['DeepMac'] == 'metadata':
@@ -481,11 +474,12 @@ class dmRecord:
 				else:
 					return 'None'
 			else:
-				log.debug("Not a DeepMac metadata record")
+				log.warn("Not a DeepMac metadata record")
 				return False
 		else:
 			return False
 
+	# Returns the Wiki Link for the record (metadata types only), or False if not specified
 	def getWiki(self):
 		if 'WikiLink' in self.rec:
 			if self.rec['DeepMac'] == 'metadata':
@@ -494,7 +488,7 @@ class dmRecord:
 				else:
 					return 'None'
 			else:
-				log.debug("Not a DeepMac metadata record")
+				log.warn("Not a DeepMac metadata record")
 				return False
 		else:
 			return False
@@ -502,17 +496,19 @@ class dmRecord:
 ###
 # Functions to set record attributes
 ###
+	# Sets the type for the record. Returns True if successful or False if invalid value given.
 	def setType(self, value):
 		if value in self.rectypes:
 			self.rec['DeepMac'] = value
 			log.debug("Set record type to %s" % (value))
 			return True
 		else:
-			log.debug("Invalid record type '%s' specified" % (value))
+			log.warn("Invalid record type '%s' specified" % (value))
 			return False
 
 ####
 
+	# Sets the Source for the record. Returns True if successful or False if invalid value given.
 	def setSource(self, value):
 		# TODO: Make Source a more explicit list set of allowed values/types
 
@@ -521,22 +517,24 @@ class dmRecord:
 			log.debug("Set Source to %s" % (value))
 			return True
 		else:
-			log.debug("Can't have empty Source")
+			log.warn("Can't have empty Source")
 			return False
 
 ####
 
+	# Sets the Event Type for the record. Returns True if successful or False if invalid value given.
 	def setEvType(self, value):
 		if value in self.eventtypes:
 			self.rec['EventType'] = value
 			log.debug("Set event type to %s" % (value))
 			return True
 		else:
-			log.debug("Invalid event type '%s' specified" % (value))
+			log.warn("Invalid event type '%s' specified" % (value))
 			return False
 
 ####
 
+	# Sets the Event Date for the record. Returns True if successful or False if invalid value given.
 	def setEvDate(self, value):
 		try:
 			datetime.datetime.strptime(value, '%Y-%m-%d')
@@ -544,11 +542,12 @@ class dmRecord:
 			log.debug("Set event date to %s" % (value))
 			return True
 		except ValueError:
-			log.debug("Invalid event date '%s' specified" % (value))
+			log.warn("Invalid event date '%s' specified" % (value))
 			return False
-			
+
 ####
 
+	# Sets the OUI Size for the record. Returns True if successful or False if invalid value given.
 	def setSize(self, value):
 		if self.rec['DeepMac'] == 'registry':
 			if value in self.ouisizes:
@@ -558,55 +557,58 @@ class dmRecord:
 				log.debug("Invalid OUI size '%s' specified" % (value))
 				return False
 		else:
-			log.debug("Not a DeepMac registry record")
+			log.warn("Not a DeepMac registry record")
 			return False
 
 ####
 
+	# Sets the OUI for the record. Returns True if successful or False if invalid value given.
 	def setOUI(self, value):
 		if self.rec['DeepMac'] == 'registry':
 			if 'OUISize' not in self.rec:
-				log.warning("OUISize must be set before OUI can be set")
+				log.warn("OUISize must be set before OUI can be set")
 				return False
 			elif len(value) <> (self.rec['OUISize'] / 4):
-				log.warning("OUI value incorrect length for OUI size")
+				log.warn("OUI value incorrect length for OUI size")
 				return False
 			elif not all(char in '0123456789ABCDEF' for char in value):
-				log.warning("Invalid OUI '%s' specified" % (value))
+				log.warn("Invalid OUI '%s' specified" % (value))
 				return False
 			else:
 				self.rec['OUI'] = value
 				return True
 		else:
-			log.debug("Not a DeepMac registry record")
+			log.warn("Not a DeepMac registry record")
 			return False
 
 ####
 
+	# Sets the Organization Name for the record. Returns True if successful or False if invalid value given.
 	def setOrgName(self, value):
 		if self.rec['DeepMac'] == 'registry':
 			if value != '':
 				self.rec['OrgName'] = value
 				return True
 			else:
-				log.debug("Organization name can't be empty")
+				log.warn("Organization name can't be empty")
 				return False
 		else:
-			log.debug("Not a DeepMac registry record")
+			log.warn("Not a DeepMac registry record")
 			return False
 
 ####
 
+	# Sets the Organization Address for the record. Returns True if successful or False if invalid value given.
 	def setOrgAddr(self, value):
 		if self.rec['DeepMac'] == 'registry':
 			if value != '':
 				self.rec['OrgAddress'] = value
 				return True
 			else:
-				log.debug("Organization address can't be empty")
+				log.warn("Organization address can't be empty")
 				return False
 		else:
-			log.debug("Not a DeepMac registry record")
+			log.warn("Not a DeepMac registry record")
 			return False
 
 ####
@@ -617,25 +619,25 @@ class dmRecord:
 				self.rec['OrgCountry'] = value
 				return True
 			else:
-				log.debug("Organization country can't be empty")
+				log.warn("Organization country can't be empty")
 				return False
 		else:
-			log.debug("Not a DeepMac registry record")
+			log.warn("Not a DeepMac registry record")
 			return False
 
 	def setMACStart(self, value):
 		if self.rec['DeepMac'] == 'metadata':
 			if len(value) <> 12:
-				log.warning("Invalid MAC '%s' specified - Incorrect length" % (value))
+				log.warn("Invalid MAC '%s' specified - Incorrect length" % (value))
 				return False
 			elif not all(char in '0123456789ABCDEF' for char in value):
-				log.warning("Invalid MAC '%s' specified - Non-HEX values present" % (value))
+				log.warn("Invalid MAC '%s' specified - Non-HEX values present" % (value))
 				return False
 			else:
 				self.rec['MACStart'] = value
 				return True
 		else:
-			log.debug("Not a DeepMac metadata record")
+			log.warn("Not a DeepMac metadata record")
 			return False
 
 ####
@@ -643,16 +645,16 @@ class dmRecord:
 	def setMACEnd(self, value):
 		if self.rec['DeepMac'] == 'metadata':
 			if len(value) <> 12:
-				log.warning("Invalid MAC '%s' specified - Incorrect length" % (value))
+				log.warn("Invalid MAC '%s' specified - Incorrect length" % (value))
 				return False
 			elif not all(char in '0123456789ABCDEF' for char in value):
-				log.warning("Invalid MAC '%s' specified - Non-HEX values present" % (value))
+				log.warn("Invalid MAC '%s' specified - Non-HEX values present" % (value))
 				return False
 			else:
 				self.rec['MACEnd'] = value
 				return True
 		else:
-			log.debug("Not a DeepMac metadata record")
+			log.warn("Not a DeepMac metadata record")
 			return False
 
 ####
@@ -663,10 +665,10 @@ class dmRecord:
 				self.rec['Confidence'] = value
 				return True
 			else:
-				log.debug("Invalid confidence value '%s' specified" % (value))
+				log.warn("Invalid confidence value '%s' specified" % (value))
 				return False
 		else:
-			log.debug("Not a DeepMac metadata record")
+			log.warn("Not a DeepMac metadata record")
 			return False
 
 ####
@@ -677,10 +679,10 @@ class dmRecord:
 				self.rec['MediaType'] = value
 				return True
 			else:
-				log.debug("Media type can't be empty")
+				log.warn("Media type can't be empty")
 				return False
 		else:
-			log.debug("Not a DeepMac metadata record")
+			log.warn("Not a DeepMac metadata record")
 			return False
 
 ####
@@ -691,10 +693,10 @@ class dmRecord:
 				self.rec['DevType'] = value
 				return True
 			else:
-				log.debug("Device type can't be empty")
+				log.warn("Device type can't be empty")
 				return False
 		else:
-			log.debug("Not a DeepMac metadata record")
+			log.warn("Not a DeepMac metadata record")
 			return False
 
 ####
@@ -705,10 +707,10 @@ class dmRecord:
 				self.rec['DevModel'] = value
 				return True
 			else:
-				log.debug("Device model can't be empty")
+				log.warn("Device model can't be empty")
 				return False
 		else:
-			log.debug("Not a DeepMac metadata record")
+			log.warn("Not a DeepMac metadata record")
 			return False
 
 ####
@@ -719,10 +721,10 @@ class dmRecord:
 				self.rec['Note'] = value
 				return True
 			else:
-				log.debug("Note can't be empty")
+				log.warn("Note can't be empty")
 				return False
 		else:
-			log.debug("Not a DeepMac metadata record")
+			log.warn("Not a DeepMac metadata record")
 			return False
 
 ####
@@ -733,10 +735,10 @@ class dmRecord:
 				self.rec['WikiLink'] = value
 				return True
 			else:
-				log.debug("Wiki link can't be empty")
+				log.warn("Wiki link can't be empty")
 				return False
 		else:
-			log.debug("Not a DeepMac metadata record")
+			log.warn("Not a DeepMac metadata record")
 			return False
 
 ####
@@ -753,25 +755,25 @@ class dmRecord:
 		self.rec = {}
 
 		# If first parameter is a string, initialize using it as a JSON string
-		if type(j) in (str, unicode):
+		if isinstance(j, (str, unicode)):
 			# JSON validation will be done in SetJSON, throws exception if invalid
 			log.debug("String passed in. Treating as JSON for initialization")
 			log.debug("\tj = %s" % (j.encode('utf8')))
 			if not self.setJSON(j):
-				print "ERROR: Could not initialize dmRecord instance, failed verify check."
-				print "\t(JSON valid but DeepMac-specific requirements for record not met, see documentation)\n"
-				raise
+				log.error("Could not initialize dmRecord instance, failed verify check.")
+				log.error("\t(JSON valid but DeepMac-specific requirements for record not met, see documentation)\n")
+				sys.exit(666)
 		# If it's a dict instead, directly pass to the "private" dict (stupid python)
-		elif type(j) == dict:
+		elif isinstance(j, dict):
 			log.debug("Dictionary passed in, using as new record")
 			log.debug("j = %s" % (str(j)))
 			self.rec = j
 		# Ok this isn't a type we support, bugger off
-		elif type(j) != type(None):
+		elif j != None:
 			log.debug("Invalid type passed as first parameter: %s" % (str(type(j))))
 			log.debug("j = %s" % (str(j)))
-			print "ERROR: Invalid type passed as first parameter, must be dict, str or unicode!\n"
-			raise 
+			log.error("Invalid type passed as first parameter, must be dict, str or unicode!\n")
+			sys.exit(666)
 			
 		# Run through all keywords that could have been given. We over-write any values already initialized via
 		# JSON this way.
@@ -797,15 +799,16 @@ class dmRecord:
 		log.debug("__init__ ending")
 		return None
 
-	# Override methods from functools for comparing two dmRecord instances
-	def __eq__(self, other):
-		return (self.getEvDate() == other.getEvDate())
-
+	# Functions for comparing two dmRecord instances based solely on event date. Allows for sorting lists of dmRecords
+	# NOTE: Will NOT evaluate any other fields and shouldn't be used to compare records for any other purpose.
 	def __lt__(self, other):
 		return (self.getEvDate() < other.getEvDate())
 
 	def __le__(self, other):
 		return (self.getEvDate() <= other.getEvDate())
+
+	def __eq__(self, other):
+		return (self.getEvDate() == other.getEvDate())
 
 	def __gt__(self, other):
 		return (self.getEvDate() > other.getEvDate())

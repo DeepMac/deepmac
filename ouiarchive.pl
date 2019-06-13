@@ -13,13 +13,14 @@
 #          into using a more specific naming schema. Also added some more error checking.
 # Updated: 2017-07-17 - Back-ported fix for "reboot" of Deepmac codebase. Addresses the change in IEEE files having
 #	   CRLF terminators. Files downloaded are now run through dos2unix.
+# Updated: 2018-09-27 - IEEE changed URL for their HW address lists. Again. :P
 
 
 # Initialization and configuration
 $DEBUG=0;
-$OUIURL='http://standards.ieee.org/regauth/oui/oui.txt';
-$OUI2CSV='/home/USERDIR/deepmac/oui2csv.pl';
-$BASE='/home/USERDIR/deepmac/kb';
+$OUIURL='http://standards-oui.ieee.org/oui/oui.txt';
+$OUI2CSV='/home/deepmac/site/oui2csv.pl';
+$BASE='/home/deepmac/site/kb';
 @ls=();
 
 debug("==- Starting a new run -==");

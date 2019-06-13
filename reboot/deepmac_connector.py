@@ -4,7 +4,9 @@
 # Author : Jeff Mercer <jedi@jedimercer.com>
 # Purpose: Class definition for DeepMac Repository Connector
 # Written: 2014/04/25
-# Updated: 2014/12/16
+# Updated: 2019/01/25
+
+# 20180125 - Updated logging levels, replaced printed errors with log statements, similar tweaks.
 
 # Used to establish a connection to a DeepMac record repository (aka journal).
 # This is an intermediary class, used by the dmManager class in order to communicate with
@@ -36,13 +38,15 @@ class dmConnector:
 	# Given an OUI (presumed valid), return a full path for the OUI's directory in the repository
 	# Note: Does not validate OUI. Does not test if directory exists or not.
 	def mkOUIPath(self, oui):
+		log.debug("mkOUIPath() starting")
+
 		# If this is not a filesystem connection, return false.
 		if self.type != "filesystem":
+			log.debug("mkOUIPath() ending")
 			return False
 
 		# Convert to standard string. Strip colons and hyphens. Convert to all uppercase.
-		oui = str(oui)
-		oui = oui.translate(None, ":-").upper()
+		oui = str(oui).translate(None, ":-").upper()
 
 		# The first 6 characters divided up into three directories in path format.
 		hexpath = oui[0:2] + "/" + oui[2:4] + "/" + oui[4:6] + "/"
@@ -54,6 +58,7 @@ class dmConnector:
 		log.debug("hexpath = %s" % (hexpath))
 
 		# Return final path. Address for this connection is the repo base directory.
+		log.debug("mkOUIPath() ending")
 		return self.addr + hexpath
 
 	# Called upon instantiation of object
@@ -71,17 +76,14 @@ class dmConnector:
 		# TODO: Connection types a global dict or something
 		if t not in ('filesystem', 'database', 'web'):
 			# TODO: Handle this properly with try/except
-			log.debug("ERROR: Invalid connection type specified.")
-			exit(1)
+			log.error("Invalid connection type specified: %s" % (t))
+			sys.exit()
 		else:
 			self.type = t
 
 		### Verify address format based on connection type
 		if self.type == 'filesystem':
-			# Convert to absolute path format
-			# NOTE: Python's handling of standard *nix path expansion is severely broken and not trustworthy.
-			# This may arbitrarily break perfectly valid paths for no good reason. Also, even an explicitly
-			# given trailing slash is removed.
+			# Convert to absolute path format. Expand any user paths that may be specified.
 			self.addr = os.path.abspath(os.path.expanduser(a)) + "/"
 		elif self.type == 'web':
 			# TODO: Regex to verify address is a valid URL
@@ -96,23 +98,23 @@ class dmConnector:
 		# Only need to check creds for DB and web types
 		if self.type in ('database', 'web'):
 			if c == None:
-				log.debug("ERROR: Credentials required for connection type %s" % (self.type))
-				exit(1)
+				log.error("Credentials required for connection type %s" % (self.type))
+				sys.exit(1)
 			if type(c) is not dict:
-				log.debug("ERROR: Credentials must be specified in dict format, not %s" % (type(c)))
-				exit(1)
+				log.error("Credentials must be specified in dict format, not %s" % (type(c)))
+				sys.exit(1)
 			elif 'u' not in c:
-				log.debug("ERROR: Credentials in a dict but missing 'u' key")
-				exit(1)
+				log.error("Credentials in a dict but missing 'u' key")
+				sys.exit(1)
 			elif 'p' not in c:
-				log.debug("ERROR: Credentials in a dict but missing 'p' key")
-				exit(1)
+				log.error("Credentials in a dict but missing 'p' key")
+				sys.exit(1)
 			elif c['u'] == "" or c['u'] == None:
-				log.debug("ERROR: Username is missing or blank for credentials")
-				exit(1)
+				log.error("Username is missing or blank for credentials")
+				sys.exit(1)
 			elif c['p'] == "" or c['p'] == None:
-				log.debug("ERROR: Password is missing or blank for credentials")
-				exit(1)
+				log.error("Password is missing or blank for credentials")
+				sys.exit(1)
 			else:
 				self.creds = c
 
@@ -125,22 +127,23 @@ class dmConnector:
 	# otherwise returns False. Connection handle is stored inside class.
 	def connect(self):
 		log.debug("connect() starting")
+		log.debug("self.type = %s" % (self.type))
 
 		### Attempt to open connection to repository
 		# For filesystem types we just make sure the directory exists
 		if self.type == 'filesystem':
 			# Make sure it exists to start with
 			if os.path.exists(self.addr):
-				log.debug("Verified path exists")
+				log.info("Verified path exists")
 				# Make sure we have a path and not a file.
 				if not os.path.isdir(self.addr):
-					log.debug("%s is a file, specify JUST a pathname!" % (self.addr))
+					log.warn("%s is a file, specify JUST a pathname!" % (self.addr))
 					log.debug("connect() ending")
 					return False
 				else:
-					log.debug("Verified path is a directory")
+					log.info("Verified path is a directory")
 			else:
-				log.debug("%s doesn't exist or is inaccessible." % (self.addr))
+				log.warn("%s doesn't exist or is inaccessible." % (self.addr))
 				log.debug("connect() ending")
 				return False
 					
@@ -159,10 +162,11 @@ class dmConnector:
 			self.con = result
 		else:
 			# Should be impossible for this to happen
-			print "ERROR: Unrecognised connection type %s" % (self.type)
+			log.error("Unrecognized connection type %s" % (self.type))
 			log.debug("connect() ending")
 			return False
 
+		log.debug("self.con = %s" % (str(self.con)))
 		log.debug("connect() ending")
 		return True
 
@@ -171,13 +175,14 @@ class dmConnector:
 	# Function for disconnecting from repository
 	def disconnect(self):
 		log.debug("disconnect() starting")
-		if self.type == 'filesystem':
-			# For filesystem types, nothing to disconnect
 
+		if self.type == 'filesystem':
 			# Erase connection handle
 			self.con = None
+			log.debug("disconnect() ending")
 			return True
 		elif self.type == 'databae':
+			# TODO: Flesh this out
 			### Invoke DB connection method to flush any remaining operation
 			### Check DB connection for any error messages, report if found.
 			### Invoke DB connection method to logout of database
@@ -185,8 +190,10 @@ class dmConnector:
 
 			# Erase connection handle
 			self.con = None
+			log.debug("disconnect() ending")
 			return True
 		elif self.type == 'web':
+			# TODO: Flesh this out
 			### Invoke web connection method to flush any remaining operation
 			### Check web connection for any error messages, report if found.
 			### Invoke web connection method to logout of database
@@ -194,13 +201,15 @@ class dmConnector:
 
 			# Erase connection handle
 			self.con = None
+			log.debug("disconnect() ending")
 			return True
 		else:
 			# Should be impossible for this to happen
-			print "ERROR: Unrecognised connection type %s" % (self.type)
+			log.warn("Unrecognized connection type %s" % (self.type))
+			log.debug("disconnect() ending")
 			return False
 
-		log.debug("disconnect() starting")
+		log.debug("disconnect() ending")
 		return True
 
 ####
@@ -209,6 +218,7 @@ class dmConnector:
 	# a valid connection handle is present, otherwise returns False
 	def isConnected(self):
 		log.debug("isConnected() starting")
+		log.debug("self.con = %s" % (self.con))
 
 		# Check if a connection handle exists or not
 		if self.con == None:
@@ -216,6 +226,7 @@ class dmConnector:
 		else:
 			status = True
 
+		log.debug("status = %s" % (str(status)))
 		log.debug("isConnected() ending")
 		return status
 
